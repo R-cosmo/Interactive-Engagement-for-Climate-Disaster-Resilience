@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Climate and Disaster Resilience</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .contact-panel,
+    .contact-card {
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 8px 22px rgba(15, 81, 50, 0.08);
+      padding: 28px;
+      border: 1px solid #e2eee7;
+    }
+
+    .contact-panel h2,
+    .contact-card h2 {
+      margin-top: 0;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .checkbox-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin: 15px 0;
+      color: #244032;
+      line-height: 1.5;
+    }
+
+    .checkbox-row input {
+      width: auto;
+      margin-top: 4px;
+    }
+
+    .hidden-field {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .message-box {
+      display: none;
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .message-box.success {
+      display: block;
+      color: #0f5132;
+      background: #d1e7dd;
+      border: 1px solid #badbcc;
+    }
+
+    .message-box.error {
+      display: block;
+      color: #842029;
+      background: #f8d7da;
+      border: 1px solid #f5c2c7;
+    }
+
+    .contact-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .contact-list li {
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #e2eee7;
+    }
+
+    .social-links a {
+      display: inline-block;
+      margin: 6px 10px 6px 0;
+      color: #198754;
+      font-weight: 700;
+    }
+
+    .small-note {
+      color: #5f7067;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 850px) {
+      .contact-layout,
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Climate and Disaster Resilience</h1>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="event.html">Events</a>
+      <a href="blog.html">Blog</a>
+      <a href="resources.html">Resources</a>
+      <a href="contribute.html">Contribute</a>
+      <a href="pestle.html">PESTLE</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+    <h2>Contact Us</h2>
+    <p>
+        Use this page for general enquiries, event suggestions, stakeholder
+        communication, partnership opportunities, feedback, and requests related to
+        climate and disaster resilience.
+    </p>
+    </section>
+  <main>
+  <main>
+    <div class="contact-layout">
+      <section class="contact-panel" aria-labelledby="contact-form-title">
+        <h2 id="contact-form-title">Send an Enquiry</h2>
+        <p class="small-note">Fields marked with * are required. This front-end demo validates the form and shows success or error messages.</p>
+
+        <form id="contactForm" action="#" method="post" enctype="multipart/form-data" novalidate>
+          <div class="form-row">
+            <div>
+              <label for="fullName">Full name *</label>
+              <input type="text" id="fullName" name="fullName" required />
+            </div>
+            <div>
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+          </div>
+
+          <label for="organisation">Organisation</label>
+          <input type="text" id="organisation" name="organisation" placeholder="School, council, company, community group, or university" />
+
+          <label for="subject">Subject *</label>
+          <input type="text" id="subject" name="subject" required />
+
+          <label for="message">Message *</label>
+          <textarea id="message" name="message" rows="7" required></textarea>
+
+          <label for="attachment">Optional file attachment</label>
+          <input type="file" id="attachment" name="attachment" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
+          <p class="small-note">Accepted example formats: PDF, Word documents, JPG and PNG.</p>
+
+          <div class="hidden-field" aria-hidden="true">
+            <label for="website">Leave this field empty</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <label for="spamCheck">Spam protection: what is 3 + 4? *</label>
+          <input type="text" id="spamCheck" name="spamCheck" required />
+
+          <label class="checkbox-row" for="privacyConsent">
+            <input type="checkbox" id="privacyConsent" name="privacyConsent" required />
+            <span>I consent to the collection and use of my information for responding to this enquiry. *</span>
+          </label>
+
+          <button type="submit">Submit Enquiry</button>
+          <div id="formMessage" class="message-box" role="alert"></div>
+        </form>
+      </section>
+
+      <aside class="contact-card" aria-labelledby="contact-details-title">
+        <h2 id="contact-details-title">Organisation Details</h2>
+        <ul class="contact-list">
+          <li><strong>Centre:</strong><br />Centre for Climate and Disaster Resilience</li>
+          <li><strong>Email:</strong><br />admin@climateresilience.example</li>
+          <li><strong>Location:</strong><br />Western Sydney, Australia</li>
+          <li><strong>Response time:</strong><br />Usually within 2–3 business days</li>
+        </ul>
+
+        <h3>Administrator Notification</h3>
+        <p class="small-note">
+          In a live website, this form would email administrators when a new enquiry is submitted.
+        </p>
+
+        <h3>Auto-response</h3>
+        <p class="small-note">
+          A live system could automatically send the sender an acknowledgement email after submission.
+        </p>
+
+        <h3>Social Links</h3>
+        <p class="social-links">
+          <a href="#">LinkedIn</a>
+          <a href="#">X / Twitter</a>
+          <a href="#">YouTube</a>
+        </p>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Climate and Disaster Resilience. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const messageBox = document.getElementById('formMessage');
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const subject = document.getElementById('subject').value.trim();
+      const message = document.getElementById('message').value.trim();
+      const spamCheck = document.getElementById('spamCheck').value.trim();
+      const privacyConsent = document.getElementById('privacyConsent').checked;
+      const honeypot = document.getElementById('website').value.trim();
+
+      messageBox.className = 'message-box';
+      messageBox.textContent = '';
+
+      if (honeypot !== '') {
+        messageBox.classList.add('error');
+        messageBox.textContent = 'Submission blocked by spam protection.';
+        return;
+      }
+
+      if (!fullName || !email || !subject || !message) {
+        messageBox.classList.add('error');
+        messageBox.textContent = 'Please complete all required fields before submitting.';
+        return;
+      }
+
+      if (!email.includes('@') || !email.includes('.')) {
+        messageBox.classList.add('error');
+        messageBox.textContent = 'Please enter a valid email address.';
+        return;
+      }
+
+      if (spamCheck !== '7') {
+        messageBox.classList.add('error');
+        messageBox.textContent = 'Spam protection answer is incorrect.';
+        return;
+      }
+
+      if (!privacyConsent) {
+        messageBox.classList.add('error');
+        messageBox.textContent = 'Please confirm the privacy consent checkbox.';
+        return;
+      }
+
+      messageBox.classList.add('success');
+      messageBox.textContent = 'Thank you. Your enquiry has been submitted successfully. An acknowledgement email would be sent in a live system.';
+      form.reset();
+    });
+  </script>
+</body>
+</html>
