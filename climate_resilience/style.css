@@ -6,10 +6,14 @@
 }
 
 html {
+  min-height: 100%;
   scroll-behavior: smooth;
 }
 
 body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.6;
   color: #1f2933;
@@ -21,6 +25,7 @@ main {
   width: min(1100px, 92%);
   margin: 0 auto;
   padding: 36px 0 56px;
+  flex: 1;
 }
 
 section {
@@ -270,11 +275,12 @@ body > form {
 
 /* ---------- Footer ---------- */
 footer {
+  width: 100%;
   text-align: center;
   background: #0b3320;
   color: #ffffff;
   padding: 24px 5%;
-  margin-top: 30px;
+  margin-top: auto;
 }
 
 footer p {

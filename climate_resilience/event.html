@@ -5,10 +5,60 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Events | Climate and Disaster Resilience</title>
+    <style>
+      .event-cta {
+        background: #bc7d66;
+        color: #ffffff;
+        text-align: center;
+        padding: 70px 20px;
+        border-radius: 0;
+        margin: 30px auto;
+        max-width: 100%;
+      }
+
+      .event-cta h2 {
+        color: #ffffff;
+        font-size: 2rem;
+        margin: 15px 0 20px;
+        border-left: none;
+        padding-left: 0;
+      }
+
+      .event-cta p {
+        color: #fdf6f2;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        max-width: 900px;
+        margin: 0 auto 30px;
+      }
+
+      .event-cta-icon {
+        font-size: 3rem;
+        line-height: 1;
+        margin-bottom: 10px;
+      }
+
+      .event-cta-button {
+        display: inline-block;
+        background: #ffffff;
+        color: #b87057;
+        text-decoration: none;
+        padding: 16px 36px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: 0.2s ease;
+      }
+
+      .event-cta-button:hover {
+        background: #f3f3f3;
+        transform: translateY(-2px);
+      }
+    </style>
   </head>
   <body>
     <header>
-      <h1>Climate and Disaster Resilience</h1>
+      <h1>Climate Engage AU</h1>
 
       <nav>
         <a href="home.html">Home</a>
@@ -17,7 +67,9 @@
         <a href="blog.html">Blog</a>
         <a href="resources.html">Resources</a>
         <a href="contribute.html">Contribute</a>
+        <a href="pestle.html">PESTLE</a>
         <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </nav>
     </header>
 
@@ -105,36 +157,26 @@
         </article>
       </section>
 
-      <section>
-        <h2>Event Enquiry</h2>
-
-        <form action="#" method="post">
-          <label for="name">Your Name</label><br />
-          <input type="text" id="name" name="name" /><br /><br />
-
-          <label for="email">Email Address</label><br />
-          <input type="email" id="email" name="email" /><br /><br />
-
-          <label for="event">Event Name</label><br />
-          <input type="text" id="event" name="event" /><br /><br />
-
-          <label for="message">Message</label><br />
-          <textarea id="message" name="message" rows="6"></textarea><br /><br />
-
-          <button type="submit">Send Enquiry</button>
-        </form>
-      </section>
-
-      <section>
-        <h2>Webinars and Talks</h2>
-
+      <section class="event-cta">
+        <div class="event-cta-icon">👥</div>
+        <h2>Want to Host or Suggest an Event?</h2>
         <p>
-          Some Climate Engage AU events may be delivered online as webinars or
-          talks. Online event links will be shared with registered participants
-          before the event date.
+          We welcome collaborations for webinars, workshops, and other events related to climate
+          disaster resilience. Get in touch to discuss opportunities.
         </p>
+        <a href="contact.html" class="event-cta-button">Contact Us</a>
       </section>
-    </main>
+
+            <section>
+              <h2>Webinars and Talks</h2>
+
+              <p>
+                Some Climate Engage AU events may be delivered online as webinars or
+                talks. Online event links will be shared with registered participants
+                before the event date.
+              </p>
+            </section>
+          </main>
 
     <footer>
       <p>&copy; 2026 Climate Engage AU. All rights reserved.</p>
