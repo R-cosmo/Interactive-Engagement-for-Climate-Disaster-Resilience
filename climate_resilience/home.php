@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,13 +16,15 @@
 
 <!-- Navigation -->
 <nav>
-    <a href="home.html">Home</a> |
-    <a href="login.html">Login</a> |
-    <a href="events.html">Events</a> |
-    <a href="blog.html">Blog</a> |
-    <a href="resources.html">Resources</a> |
-    <a href="contribute.html">Contribute</a> |
-    <a href="pestle.html">PESTLE</a>
+    <a href="home.php">Home</a> |
+    <a href="login.php">Login</a> |
+    <a href="events.php">Events</a> |
+    <a href="blog.php">Blog</a> |
+    <a href="resources.php">Resources</a> |
+    <a href="contribute.php">Contribute</a> |
+    <a href="pestle.php">PESTLE</a>
+    <strong>Welcome, <?php echo $_SESSION['username']; ?></strong> |
+    <a href="logout.php">Logout</a>
 </nav>
 
 <!-- Hero section -->
@@ -40,19 +51,19 @@
     <div>
         <h3>Australia</h3>
         <p>National frameworks, bushfire recovery, and community resilience.</p>
-        <a href="regions.html">Explore Australia</a>
+        <a href="regions.php">Explore Australia</a>
     </div>
 
     <div>
         <h3>APEC Region</h3>
         <p>Regional cooperation, shared challenges, and collective action.</p>
-        <a href="regions.html">Explore APEC</a>
+        <a href="regions.php">Explore APEC</a>
     </div>
 
     <div>
         <h3>Global</h3>
         <p>International frameworks, climate agreements, and global initiatives.</p>
-        <a href="regions.html">Explore Global</a>
+        <a href="regions.php">Explore Global</a>
     </div>
 </section>
 
@@ -77,14 +88,14 @@
 <section name="blog">
     <h2>Latest from Our Blog</h2>
     <p>Stay updated with the latest insights and discussions on climate resilience and disaster recovery.</p>
-    <a href="blog.html">Read More</a>
+    <a href="blog.php">Read More</a>
 </section>
 
 <!-- Events Section -->
 <section name="events">
     <h2>Upcoming Events</h2>
     <p>Join us for webinars, workshops, and conferences on climate resilience and disaster recovery.</p>
-    <a href="events.html">View Events</a>
+    <a href="events.php">View Events</a>
 </section>
 
 <!-- Features -->

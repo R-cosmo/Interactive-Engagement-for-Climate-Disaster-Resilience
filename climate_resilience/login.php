@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// If already logged in, go to home
+if (isset($_SESSION['username'])) {
+    header("Location: home.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,19 +16,19 @@
 
 <!-- Navigation -->
 <nav>
-    <a href="home.html">Home</a> |
-    <a href="login.html">Login</a> |
-    <a href="events.html">Events</a> |
-    <a href="blog.html">Blog</a> |
-    <a href="resources.html">Resources</a> |
-    <a href="contribute.html">Contribute</a> |
-    <a href="pestle.html">PESTLE</a>
+    <a href="home.php">Home</a> |
+    <a href="login.php">Login</a> |
+    <a href="events.php">Events</a> |
+    <a href="blog.php">Blog</a> |
+    <a href="resources.php">Resources</a> |
+    <a href="contribute.php">Contribute</a> |
+    <a href="pestle.php">PESTLE</a>
 </nav>
 
 <h2>Login</h2>
 <p>Please enter your username and password.</p>
 
-<form action="user.html" method="post">
+<form action="login_check.php" method="post">
     <label>Username:</label><br>
     <input type="text" name="username" required><br><br>
 
