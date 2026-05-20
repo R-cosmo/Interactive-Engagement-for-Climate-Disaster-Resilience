@@ -16,7 +16,8 @@ if ($_SESSION['role'] === 'admin') {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Climate Resilience Platform</title>
+  <title>Climate Resilience Platform</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -34,6 +35,18 @@ if ($_SESSION['role'] === 'admin') {
     <a href="logout.php">Logout</a>
 </nav>
 
+  <nav>
+        <a href="home.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="event.html">Events</a>
+        <a href="blog.html">Blog</a>
+        <a href="resources.html">Resources</a>
+        <a href="contribute.html">Contribute</a>
+        <a href="pestle.html">PESTLE</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+  </nav>
+</header>
 <!-- Hero section -->
 <section name="hero">
     <h1>Climate and Disaster Resilience</h1>
