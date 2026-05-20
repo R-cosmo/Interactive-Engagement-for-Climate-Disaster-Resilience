@@ -22,13 +22,13 @@ if ($_SESSION['role'] === 'admin') {
 
 <!-- Navigation -->
 <nav>
-    <a href="home.php">Home</a> |
-    <a href="login.php">Login</a> |
-    <a href="events.php">Events</a> |
-    <a href="blog.php">Blog</a> |
-    <a href="resources.php">Resources</a> |
-    <a href="contribute.php">Contribute</a> |
-    <a href="pestle.php">PESTLE</a>
+    <a href="home.html">Home</a> |
+    <a href="login.html">Login</a> |
+    <a href="events.html">Events</a> |
+    <a href="blog.html">Blog</a> |
+    <a href="resources.html">Resources</a> |
+    <a href="contribute.html">Contribute</a> |
+    <a href="pestle.html">PESTLE</a>
 
     <strong>Welcome, <?php echo $_SESSION['username']; ?> (<?php echo $_SESSION['role']; ?>)</strong> |
     <a href="logout.php">Logout</a>
