@@ -1,44 +1,36 @@
 <?php
 session_start();
+require 'vendor/autoload.php';
 
-// If already logged in, go to home
-if (isset($_SESSION['username'])) {
-    header("Location: home.php");
-    exit;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Connect to MongoDB
+    $client = new MongoDB\Client("mongodb+srv://zihengchen1_db_user:Password123!@cluster0.exqvqaj.mongodb.net/?retryWrites=true&w=majority");
+    $collection = $client->climate_db->users;
+
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    // Find user
+    $user = $collection->findOne(["username" => $username]);
+
+    if (!$user) {
+        $error = "User not found";
+    } else if (!password_verify($password, $user['password'])) {
+        $error = "Incorrect password";
+    } else {
+        // SUCCESS — set session
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['role'] = $user['role'];
+
+        // Redirect based on role
+        if ($user['role'] === 'admin') {
+            header("Location: admin.php");
+        } else {
+            header("Location: home.php");
+        }
+        exit;
+    }
 }
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
 
-<!-- Navigation -->
-<nav>
-    <a href="home.php">Home</a> |
-    <a href="login.php">Login</a> |
-    <a href="events.php">Events</a> |
-    <a href="blog.php">Blog</a> |
-    <a href="resources.php">Resources</a> |
-    <a href="contribute.php">Contribute</a> |
-    <a href="pestle.php">PESTLE</a>
-</nav>
-
-<h2>Login</h2>
-<p>Please enter your username and password.</p>
-
-<form action="login_check.php" method="post">
-    <label>Username:</label><br>
-    <input type="text" name="username" required><br><br>
-
-    <label>Password:</label><br>
-    <input type="password" name="password" required><br><br>
-
-    <button type="submit">Login</button>
-</form>
-
-<p>Admin login will redirect to admin page later.</p>
-
-</body>
-</html>

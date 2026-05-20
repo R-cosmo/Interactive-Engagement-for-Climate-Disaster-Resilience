@@ -2,7 +2,13 @@
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
+    header("Location: login.html");
+    exit;
+}
+
+// Optional: block admin from entering home.php
+if ($_SESSION['role'] === 'admin') {
+    header("Location: admin.php");
     exit;
 }
 ?>
@@ -23,7 +29,8 @@ if (!isset($_SESSION['username'])) {
     <a href="resources.php">Resources</a> |
     <a href="contribute.php">Contribute</a> |
     <a href="pestle.php">PESTLE</a>
-    <strong>Welcome, <?php echo $_SESSION['username']; ?></strong> |
+
+    <strong>Welcome, <?php echo $_SESSION['username']; ?> (<?php echo $_SESSION['role']; ?>)</strong> |
     <a href="logout.php">Logout</a>
 </nav>
 
