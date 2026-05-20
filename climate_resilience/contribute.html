@@ -63,32 +63,33 @@
       <section>
         <h2>Contribution Form</h2>
 
-        <form action="#" method="post">
+        <form id="contributionForm" action="#" method="post">
           <label for="name">Your Name</label><br />
-          <input type="text" id="name" name="name" /><br /><br />
+          <input type="text" id="name" name="name" required /><br /><br />
 
           <label for="email">Email Address</label><br />
-          <input type="email" id="email" name="email" /><br /><br />
+          <input type="email" id="email" name="email" required /><br /><br />
 
           <label for="type">Contribution Type</label><br />
-          <select id="type" name="type">
+          <select id="type" name="type" required>
             <option value="">Select an option</option>
             <option value="report">Report</option>
             <option value="research">Research</option>
             <option value="community">Community Information</option>
-            <option value="correction">Correction or Update</option></select
-          ><br /><br />
+            <option value="correction">Correction or Update</option>
+          </select><br /><br />
 
           <label for="title">Title</label><br />
-          <input type="text" id="title" name="title" /><br /><br />
+          <input type="text" id="title" name="title" required /><br /><br />
 
           <label for="link">Resource Link</label><br />
           <input type="url" id="link" name="link" /><br /><br />
 
           <label for="message">Message</label><br />
-          <textarea id="message" name="message" rows="6"></textarea><br /><br />
+          <textarea id="message" name="message" rows="6" required></textarea><br /><br />
 
           <button type="submit">Submit Contribution</button>
+          <p id="contributionMessage" aria-live="polite"></p>
         </form>
       </section>
     </main>
@@ -96,5 +97,62 @@
     <footer>
       <p>&copy; 2026 Climate Engage AU. All rights reserved.</p>
     </footer>
+
+    <script>
+      const contributionForm = document.getElementById('contributionForm');
+      const contributionMessage = document.getElementById('contributionMessage');
+
+      contributionForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const contributionType = document.getElementById('type').value;
+        const title = document.getElementById('title').value.trim();
+        const link = document.getElementById('link').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        if (!name || !email || !contributionType || !title || !message) {
+          contributionMessage.textContent = 'Please complete all required fields.';
+          contributionMessage.style.color = '#842029';
+          return;
+        }
+
+        contributionMessage.textContent = 'Submitting...';
+        contributionMessage.style.color = '#244032';
+
+        fetch('https://interactive-engagement-for-climate.onrender.com/submit.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            organisation: '',
+            contribution_type: contributionType,
+            region: 'Australia',
+            title: title,
+            description: link ? `${message}\n\nResource link: ${link}` : message
+          })
+        })
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            if (!data.success) {
+              throw new Error(data.error || 'Submission failed');
+            }
+
+            contributionMessage.textContent = 'Thank you. Your contribution has been submitted successfully.';
+            contributionMessage.style.color = '#0f5132';
+            contributionForm.reset();
+          })
+          .catch(function (error) {
+            contributionMessage.textContent = error.message || 'Submission failed. Please try again later.';
+            contributionMessage.style.color = '#842029';
+          });
+      });
+    </script>
   </body>
 </html>
