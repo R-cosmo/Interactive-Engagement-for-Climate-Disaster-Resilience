@@ -47,5 +47,41 @@
   <footer>
     <p>&copy; 2026 Climate and Disaster Resilience. All rights reserved.</p>
   </footer>
+
+  <script>
+    document.querySelector("form").addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const username = document.querySelector('input[name="username"]').value.trim();
+      const password = document.querySelector('input[name="password"]').value.trim();
+
+      // Call login API
+      const response = await fetch("http://localhost:8080/login_api.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+          // Redirect based on role
+          if (data.role === "admin") {
+            alert("Login successful! Redirecting to admin page.")
+            window.location.href = "admin.php";
+          } else {
+            alert("Login successful! Redirecting to home page.")
+            window.location.href = "home.html";
+          }
+      } else {
+          alert("Login failed: " + (data.error || "Invalid username or password"));
+      }
+    });
+  </script>
 </body>
 </html>
