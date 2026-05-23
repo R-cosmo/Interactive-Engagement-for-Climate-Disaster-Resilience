@@ -197,6 +197,11 @@ input[type="submit"]:hover {
   transform: translateY(-1px);
 }
 
+.btn-register:hover {
+  background: #146c43;
+  transform: translateY(-1px);
+}
+
 /* ---------- Lists ---------- */
 ul,
 ol {

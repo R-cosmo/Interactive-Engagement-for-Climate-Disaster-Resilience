@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Climate and Disaster Resilience</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header>
+    <h1>Climate Engage AU</h1>
+
+    <nav>
+        <a href="home.html">Home</a> |
+        <a href="login.html">Login</a> |
+        <a href="event.html">Events</a> |
+        <a href="blog.html">Blog</a> |
+        <a href="resources.html">Resources</a> |
+        <a href="contribute.html">Contribute</a> |
+        <a href="pestle.html">PESTLE</a> |
+        <a href="about.html">About</a> |
+        <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+    <main>
+        <section>
+        <h2>Register</h2>
+        <p>Please fill in the form to create an account.</p>
+    
+        <form action="register.php" method="post">
+        <label>Username:</label><br>
+        <input type="text" name="username" required><br><br>
+    
+            <label for="email">Email:</label><br />
+            <input type="email" id="email" name="email" required /><br /><br />
+    
+            <label for="password">Password:</label><br />
+            <input type="password" id="password" name="password" required /><br /><br />
+    
+            <button type="submit">Register</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Climate and Disaster Resilience. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.querySelector("form").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const username = document.querySelector('input[name="username"]').value.trim();
+            const email = document.querySelector('input[name="email"]').value.trim();
+            const password = document.querySelector('input[name="password"]').value.trim();
+
+            // Send JSON to hoster API
+            const response = await fetch("http://interactive-engagement-for-climate.onrender.com/register.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password,
+                    role: "user"
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert("Registration successful! Redirecting to login page.");
+                window.location.href = "login.html";
+            } else {
+                alert("Registration failed: " + data.error);
+            }
+        });
+    </script>
+  </body>
+</html>
