@@ -113,15 +113,30 @@
   <header>
     <h1>Climate Engage AU</h1>
     <nav>
-        <a href="home.html">Home</a>
-        <a href="login.html">Login</a>
-        <a href="event.html">Events</a>
-        <a href="blog.html">Blog</a>
-        <a href="resources.html">Resources</a>
-        <a href="contribute.html">Contribute</a>
-        <a href="pestle.html">PESTLE</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
+        | <a href="home.html">Home</a> |
+        <a href="event.html">Events</a> |
+        <a href="blog.html">Blog</a> |
+        <a href="resources.html">Resources</a> |
+        <a href="contribute.html">Contribute</a> |
+        <a href="pestle.html">PESTLE</a> |
+        <a href="about.html">About</a> |
+        <a href="contact.html">Contact</a> |
+
+        <span id="loginWrapper">
+            <a href="login.html">Login</a> |
+        </span>
+
+        <span id="welcomeWrapper">
+            <strong id="welcomeText">Welcome, Guest</strong> |
+        </span>
+
+        <span id="adminGo">
+            <a href="admin.html" id="adminLink">Admin</a> |
+        </span>
+
+        <span id="logoutWrapper">
+            <a href="logout.html" id="logoutLink">Logout</a>
+        </span>
     </nav>
   </header>
 
@@ -217,6 +232,34 @@
   </footer>
 
   <script>
+    const username = localStorage.getItem("username");
+    const role = localStorage.getItem("role");
+
+    const loginWrapper = document.getElementById("loginWrapper");
+    const welcomeWrapper = document.getElementById("welcomeWrapper");
+    const logoutWrapper = document.getElementById("logoutWrapper");
+    const welcomeText = document.getElementById("welcomeText");
+
+    if (username) {
+        // Logged in
+        welcomeText.textContent = "Welcome, " + username;
+
+        loginWrapper.style.display = "none";   // hide Login + divider
+        logoutWrapper.style.display = "inline";
+    } else {
+        // Guest
+        welcomeText.textContent = "Welcome, Guest";
+
+        loginWrapper.style.display = "inline";
+        logoutWrapper.style.display = "none";  // hide Logout
+    }
+
+    if (role === "admin") {
+        document.getElementById("adminGo").style.display = "inline";
+    } else {
+        document.getElementById("adminGo").style.display = "none";
+    }
+    
     const form = document.getElementById('contactForm');
     const messageBox = document.getElementById('formMessage');
 
