@@ -29,10 +29,6 @@
             <strong id="welcomeText">Welcome, Guest</strong> |
         </span>
 
-        <span id="adminGo">
-            <a href="admin.html" id="adminLink">Admin</a> |
-        </span>
-
         <span id="logoutWrapper">
             <a href="logout.html" id="logoutLink">Logout</a>
         </span>
@@ -65,33 +61,6 @@
     </footer>
 
     <script>
-        const username = localStorage.getItem("username");
-        const role = localStorage.getItem("role");
-
-        const loginWrapper = document.getElementById("loginWrapper");
-        const welcomeWrapper = document.getElementById("welcomeWrapper");
-        const logoutWrapper = document.getElementById("logoutWrapper");
-        const welcomeText = document.getElementById("welcomeText");
-
-        if (username) {
-            // Logged in
-            welcomeText.textContent = "Welcome, " + username;
-
-            loginWrapper.style.display = "none";   // hide Login + divider
-            logoutWrapper.style.display = "inline";
-        } else {
-            // Guest
-            welcomeText.textContent = "Welcome, Guest";
-
-            loginWrapper.style.display = "inline";
-            logoutWrapper.style.display = "none";  // hide Logout
-        }
-
-        if (role === "admin") {
-            document.getElementById("adminGo").style.display = "inline";
-        } else {
-            document.getElementById("adminGo").style.display = "none";
-        }
         
         document.querySelector("form").addEventListener("submit", async function (event) {
             event.preventDefault();
