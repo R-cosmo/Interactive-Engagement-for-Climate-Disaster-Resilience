@@ -84,12 +84,6 @@
         <label for="blogTags">Tags</label>
         <input type="text" id="blogTags" name="tags" placeholder="resilience, climate risk, community" />
 
-        <label for="blogStatus">Status</label>
-        <select id="blogStatus" name="status">
-          <option value="published">Published</option>
-          <option value="draft">Draft</option>
-        </select>
-
         <button type="submit">Create Blog</button>
         <p id="blogMessage" class="status-message" aria-live="polite"></p>
       </form>
@@ -117,8 +111,7 @@
         content: document.getElementById("blogContent").value.trim(),
         author: document.getElementById("blogAuthor").value.trim(),
         category: document.getElementById("blogCategory").value,
-        tags: document.getElementById("blogTags").value.trim(),
-        status: document.getElementById("blogStatus").value
+        tags: document.getElementById("blogTags").value.trim()
       };
 
       if (!payload.title || !payload.summary || !payload.content || !payload.author || !payload.category) {
