@@ -118,6 +118,13 @@ section[name="hero"] div p {
   text-align: center;
 }
 
+#welcomeText {
+    font-weight: bold;
+    color: #aedfc5;      /* blue */
+    font-size: 18px;
+    padding-left: 10px;
+}
+
 /* ---------- Typography ---------- */
 h1,
 h2,
@@ -193,6 +200,11 @@ input[type="submit"] {
 main a:hover,
 button:hover,
 input[type="submit"]:hover {
+  background: #146c43;
+  transform: translateY(-1px);
+}
+
+.btn-register:hover {
   background: #146c43;
   transform: translateY(-1px);
 }
