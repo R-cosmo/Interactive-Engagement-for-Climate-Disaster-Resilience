@@ -27,9 +27,12 @@
 </head>
 <body>
   <script>
-    if (localStorage.getItem("role") !== "admin") {
+    const storedUsername = localStorage.getItem("username");
+    const storedRole = localStorage.getItem("role");
+
+    if (!storedUsername || storedRole !== "admin") {
       alert("Admin access only.");
-      window.location.href = "login.html";
+      window.location.replace("login.html");
     }
   </script>
 

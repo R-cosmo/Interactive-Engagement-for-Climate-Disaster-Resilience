@@ -405,6 +405,33 @@
     </footer>
 
     <script>
+      const username = localStorage.getItem("username");
+      const role = localStorage.getItem("role");
+
+      const loginWrapper = document.getElementById("loginWrapper");
+      const welcomeWrapper = document.getElementById("welcomeWrapper");
+      const logoutWrapper = document.getElementById("logoutWrapper");
+      const welcomeText = document.getElementById("welcomeText");
+      const adminGo = document.getElementById("adminGo");
+
+      if (username) {
+        welcomeText.textContent = "Welcome, " + username;
+        loginWrapper.style.display = "none";
+        welcomeWrapper.style.display = "inline";
+        logoutWrapper.style.display = "inline";
+      } else {
+        welcomeText.textContent = "Welcome, Guest";
+        loginWrapper.style.display = "inline";
+        welcomeWrapper.style.display = "inline";
+        logoutWrapper.style.display = "none";
+      }
+
+      if (role === "admin") {
+        adminGo.style.display = "inline";
+      } else {
+        adminGo.style.display = "none";
+      }
+
       const tabs = document.querySelectorAll('.event-tab');
       const sections = document.querySelectorAll('.event-section');
 

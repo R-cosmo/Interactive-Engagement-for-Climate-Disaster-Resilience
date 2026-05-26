@@ -63,6 +63,11 @@ nav {
   align-items: center;
 }
 
+#adminGo,
+#logoutWrapper {
+  display: none;
+}
+
 nav a,
 header nav a,
 body > nav a {
