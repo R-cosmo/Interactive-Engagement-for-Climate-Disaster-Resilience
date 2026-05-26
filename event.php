@@ -2,7 +2,7 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS");
 
 if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
     http_response_code(200);
@@ -52,7 +52,7 @@ try {
         exit();
     }
 
-    if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    if ($_SERVER["REQUEST_METHOD"] !== "POST" && $_SERVER["REQUEST_METHOD"] !== "PUT") {
         http_response_code(405);
         echo json_encode([
             "success" => false,
@@ -68,6 +68,15 @@ try {
         echo json_encode([
             "success" => false,
             "error" => "Invalid JSON"
+        ]);
+        exit();
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] === "PUT" && empty($data["id"])) {
+        http_response_code(400);
+        echo json_encode([
+            "success" => false,
+            "error" => "Event id is required"
         ]);
         exit();
     }
@@ -89,7 +98,7 @@ try {
 
     $eventDate = new DateTime($data["event_date"]);
 
-    $result = $collection->insertOne([
+    $eventPayload = [
         "title" => $data["title"],
         "description" => $data["description"],
         "event_type" => $data["event_type"],
@@ -97,7 +106,29 @@ try {
         "start_time" => $data["start_time"] ?? "",
         "registration_link" => $data["registration_link"] ?? "",
         "status" => $data["status"] ?? "upcoming",
-        "event_date" => new MongoDB\BSON\UTCDateTime($eventDate->getTimestamp() * 1000),
+        "event_date" => new MongoDB\BSON\UTCDateTime($eventDate->getTimestamp() * 1000)
+    ];
+
+    if ($_SERVER["REQUEST_METHOD"] === "PUT") {
+        $result = $collection->updateOne(
+            ["_id" => new MongoDB\BSON\ObjectId($data["id"])],
+            [
+                '$set' => $eventPayload + [
+                    "updated_at" => new MongoDB\BSON\UTCDateTime()
+                ]
+            ]
+        );
+
+        echo json_encode([
+            "success" => true,
+            "matched" => $result->getMatchedCount(),
+            "modified" => $result->getModifiedCount()
+        ]);
+        exit();
+    }
+
+    $result = $collection->insertOne([
+        ...$eventPayload,
         "created_at" => new MongoDB\BSON\UTCDateTime()
     ]);
 

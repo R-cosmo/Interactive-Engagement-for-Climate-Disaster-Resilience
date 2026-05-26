@@ -276,7 +276,7 @@
                   <span>🕘 9:30 am</span>
                   <span>📅 15 May</span>
                 </div>
-                <a class="event-register" href="registration.html">Register ↗</a>
+                <a class="event-register" href="event-detail.html?id=resilience-workshop">Register</a>
               </div>
             </article>
 
@@ -299,7 +299,7 @@
                   <span>🕘 11:00 am</span>
                   <span>📅 28 May</span>
                 </div>
-                <a class="event-register" href="registration.html">Register ↗</a>
+                <a class="event-register" href="event-detail.html?id=local-action-webinar">Register</a>
               </div>
             </article>
 
@@ -322,7 +322,7 @@
                   <span>🕘 2:00 pm</span>
                   <span>📅 12 June</span>
                 </div>
-                <a class="event-register" href="registration.html">Register ↗</a>
+                <a class="event-register" href="event-detail.html?id=climate-engagement-talk">Register</a>
               </div>
             </article>
           </div>
@@ -349,7 +349,7 @@
                   <span>🕘 10:00 am</span>
                   <span>📅 20 March</span>
                 </div>
-                <a class="event-register" href="event-detail.html">View Summary ↗</a>
+                <a class="event-register" href="event-detail.html?id=climate-awareness-forum">View Summary</a>
               </div>
             </article>
 
@@ -372,7 +372,7 @@
                   <span>🕘 1:00 pm</span>
                   <span>📅 5 April</span>
                 </div>
-                <a class="event-register" href="event-detail.html">View Summary ↗</a>
+                <a class="event-register" href="event-detail.html?id=extreme-weather-talk">View Summary</a>
               </div>
             </article>
           </div>
@@ -405,6 +405,33 @@
     </footer>
 
     <script>
+      const username = localStorage.getItem("username");
+      const role = localStorage.getItem("role");
+
+      const loginWrapper = document.getElementById("loginWrapper");
+      const welcomeWrapper = document.getElementById("welcomeWrapper");
+      const logoutWrapper = document.getElementById("logoutWrapper");
+      const welcomeText = document.getElementById("welcomeText");
+      const adminGo = document.getElementById("adminGo");
+
+      if (username) {
+        welcomeText.textContent = "Welcome, " + username;
+        loginWrapper.style.display = "none";
+        welcomeWrapper.style.display = "inline";
+        logoutWrapper.style.display = "inline";
+      } else {
+        welcomeText.textContent = "Welcome, Guest";
+        loginWrapper.style.display = "inline";
+        welcomeWrapper.style.display = "inline";
+        logoutWrapper.style.display = "none";
+      }
+
+      if (role === "admin") {
+        adminGo.style.display = "inline";
+      } else {
+        adminGo.style.display = "none";
+      }
+
       const tabs = document.querySelectorAll('.event-tab');
       const sections = document.querySelectorAll('.event-section');
 

@@ -2,7 +2,7 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST, PUT, OPTIONS");
 
 if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
     http_response_code(200);
@@ -48,7 +48,7 @@ try {
         exit();
     }
 
-    if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    if ($_SERVER["REQUEST_METHOD"] !== "POST" && $_SERVER["REQUEST_METHOD"] !== "PUT") {
         http_response_code(405);
         echo json_encode([
             "success" => false,
@@ -64,6 +64,15 @@ try {
         echo json_encode([
             "success" => false,
             "error" => "Invalid JSON"
+        ]);
+        exit();
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] === "PUT" && empty($data["id"])) {
+        http_response_code(400);
+        echo json_encode([
+            "success" => false,
+            "error" => "Blog id is required"
         ]);
         exit();
     }
@@ -88,6 +97,31 @@ try {
         $tags = array_values(array_filter(array_map("trim", explode(",", $data["tags"]))));
     }
 
+    if ($_SERVER["REQUEST_METHOD"] === "PUT") {
+        $result = $collection->updateOne(
+            ["_id" => new MongoDB\BSON\ObjectId($data["id"])],
+            [
+                '$set' => [
+                    "title" => $data["title"],
+                    "summary" => $data["summary"],
+                    "content" => $data["content"],
+                    "author" => $data["author"],
+                    "category" => $data["category"],
+                    "tags" => $tags,
+                    "status" => "published",
+                    "updated_at" => new MongoDB\BSON\UTCDateTime()
+                ]
+            ]
+        );
+
+        echo json_encode([
+            "success" => true,
+            "matched" => $result->getMatchedCount(),
+            "modified" => $result->getModifiedCount()
+        ]);
+        exit();
+    }
+
     $result = $collection->insertOne([
         "title" => $data["title"],
         "summary" => $data["summary"],
@@ -95,7 +129,7 @@ try {
         "author" => $data["author"],
         "category" => $data["category"],
         "tags" => $tags,
-        "status" => $data["status"] ?? "published",
+        "status" => "published",
         "created_at" => new MongoDB\BSON\UTCDateTime()
     ]);
 
