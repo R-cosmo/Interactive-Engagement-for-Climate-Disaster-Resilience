@@ -1,19 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Dashboard</title>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        ul.admin-menu {
+            list-style: none;
+            padding: 0;
+            max-width: 400px;
+            margin: 40px auto;
+        }
+
+        ul.admin-menu li {
+            margin: 15px 0;
+        }
+
+        ul.admin-menu li a {
+            display: block;
+            padding: 15px 20px;
+            background: #f0fff6;
+            border: 1px solid #c8ffee;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            color: #3fb074;
+            transition: 0.25s ease;
+        }
+
+        ul.admin-menu li a:hover {
+            background: #d9fff0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        #welcomeText {
+            color: #16871c;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
 </head>
 <body>
 
+<script>
+    const username = localStorage.getItem("username");
+    const role = localStorage.getItem("role");
+    //if (role !== "admin") {
+        //alert("Access denied. Admins only.");
+        //window.location.href = "home.html";
+    //}
+
+    if (username) {
+        document.getElementById("welcomeText").textContent = `Welcome, ${username}!`;
+    }
+</script>
+
+<h1>Admin Dashboard</h1>
+
 <nav>
-    <a href="admin.html">Admin Dashboard</a> |
     <a href="home.html">Home</a> |
-    <strong>Admin: </strong> |
     <a href="logout.html">Logout</a>
 </nav>
 
-<h1>Admin Panel</h1>
-<p>Only admins can see this page.</p>
+<ul class="admin-menu">
+    <strong id="welcomeText">Welcome, Admin</strong>
+    <li><a href="admin_events.php">Manage Events</a></li>
+    <li><a href="admin_blog.php">Manage Blog Posts</a></li>
+    <li><a href="admin_resources.php">Manage Resources</a></li>
+    <li><a href="admin_users.php">Manage Users</a></li>
+</ul>
 
 </body>
 </html>
