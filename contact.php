@@ -1,4 +1,9 @@
 <?php
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+
+require __DIR__ . "/vendor/autoload.php";
+
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -53,8 +58,15 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit();
 }
 
-$recipient = "maryscott10946@gmail.com";
+$smtpHost = "smtp.gmail.com";
+$smtpPort = 587;
+$smtpUsername = "maryscott10946@gmail.com";
+$smtpPassword = "nxnfxytnnypsyegj";
+$mailFrom = "maryscott10946@gmail.com";
+$mailTo = "maryscott10946@gmail.com";
+
 $safeSubject = "Climate Engage AU enquiry: " . str_replace(["\r", "\n"], "", $subject);
+$safeFullName = str_replace(["\r", "\n"], "", $fullName);
 
 $emailBody = implode("\n", [
     "A new enquiry has been submitted from the Climate Engage AU contact form.",
@@ -68,19 +80,31 @@ $emailBody = implode("\n", [
     $message
 ]);
 
-$headers = [
-    "From: Climate Engage AU <no-reply@interactive-engagement-for-climate.onrender.com>",
-    "Reply-To: " . $fullName . " <" . $email . ">",
-    "Content-Type: text/plain; charset=UTF-8"
-];
+try {
+    $mail = new PHPMailer(true);
+    $mail->isSMTP();
+    $mail->Host = $smtpHost;
+    $mail->SMTPAuth = true;
+    $mail->Username = $smtpUsername;
+    $mail->Password = $smtpPassword;
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = $smtpPort;
+    $mail->CharSet = "UTF-8";
 
-$sent = mail($recipient, $safeSubject, $emailBody, implode("\r\n", $headers));
+    $mail->setFrom($mailFrom, "Climate Engage AU");
+    $mail->addAddress($mailTo);
+    $mail->addReplyTo($email, $safeFullName);
 
-if (!$sent) {
+    $mail->isHTML(false);
+    $mail->Subject = $safeSubject;
+    $mail->Body = $emailBody;
+
+    $mail->send();
+} catch (Exception $e) {
     http_response_code(500);
     echo json_encode([
         "success" => false,
-        "error" => "Email could not be sent by the server"
+        "error" => "Email could not be sent by SMTP"
     ]);
     exit();
 }
