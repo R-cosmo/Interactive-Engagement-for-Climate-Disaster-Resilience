@@ -1,9 +1,4 @@
 <?php
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\PHPMailer;
-
-require __DIR__ . "/vendor/autoload.php";
-
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -58,15 +53,20 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit();
 }
 
-$smtpHost = "smtp.gmail.com";
-$smtpPort = 587;
-$smtpUsername = "maryscott10946@gmail.com";
-$smtpPassword = "nxnfxytnnypsyegj";
-$mailFrom = "maryscott10946@gmail.com";
-$mailTo = "maryscott10946@gmail.com";
+$resendApiKey = getenv("RESEND_API_KEY") ?: "re_iCLFNg2H_5rDLjcvfMUhHepZAxaJhbq9A";
+$mailFrom = getenv("MAIL_FROM") ?: "Climate Engage AU <onboarding@resend.dev>";
+$mailTo = getenv("MAIL_TO") ?: "maryscott10946@gmail.com";
+
+if ($resendApiKey === "") {
+    http_response_code(500);
+    echo json_encode([
+        "success" => false,
+        "error" => "Email API key is not configured"
+    ]);
+    exit();
+}
 
 $safeSubject = "Climate Engage AU enquiry: " . str_replace(["\r", "\n"], "", $subject);
-$safeFullName = str_replace(["\r", "\n"], "", $fullName);
 
 $emailBody = implode("\n", [
     "A new enquiry has been submitted from the Climate Engage AU contact form.",
@@ -80,36 +80,37 @@ $emailBody = implode("\n", [
     $message
 ]);
 
-try {
-    $mail = new PHPMailer(true);
-    $mail->isSMTP();
-    $mail->Host = $smtpHost;
-    $mail->SMTPAuth = true;
-    $mail->Username = $smtpUsername;
-    $mail->Password = $smtpPassword;
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = $smtpPort;
-    $mail->CharSet = "UTF-8";
+$payload = [
+    "from" => $mailFrom,
+    "to" => [$mailTo],
+    "reply_to" => $email,
+    "subject" => $safeSubject,
+    "text" => $emailBody
+];
 
-    $mail->setFrom($mailFrom, "Climate Engage AU");
-    $mail->addAddress($mailTo);
-    $mail->addReplyTo($email, $safeFullName);
+$context = stream_context_create([
+    "http" => [
+        "method" => "POST",
+        "header" => implode("\r\n", [
+            "Authorization: Bearer " . $resendApiKey,
+            "Content-Type: application/json"
+        ]),
+        "content" => json_encode($payload),
+        "ignore_errors" => true,
+        "timeout" => 20
+    ]
+]);
 
-    $mail->isHTML(false);
-    $mail->Subject = $safeSubject;
-    $mail->Body = $emailBody;
+$response = file_get_contents("https://api.resend.com/emails", false, $context);
+$statusLine = $http_response_header[0] ?? "";
+$statusCode = preg_match('/\s(\d{3})\s/', $statusLine, $matches) ? (int) $matches[1] : 0;
 
-    $mail->send();
-} catch (Exception $e) {
-    $debugMessage = isset($mail) && $mail->ErrorInfo
-        ? $mail->ErrorInfo
-        : $e->getMessage();
-
+if ($response === false || $statusCode < 200 || $statusCode >= 300) {
     http_response_code(500);
     echo json_encode([
         "success" => false,
-        "error" => "Email could not be sent by SMTP",
-        "debug" => $debugMessage
+        "error" => "Email could not be sent by HTTP email API",
+        "debug" => $response ? json_decode($response, true) : $statusLine
     ]);
     exit();
 }
