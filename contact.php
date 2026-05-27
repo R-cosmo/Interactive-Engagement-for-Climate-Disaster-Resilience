@@ -101,10 +101,15 @@ try {
 
     $mail->send();
 } catch (Exception $e) {
+    $debugMessage = isset($mail) && $mail->ErrorInfo
+        ? $mail->ErrorInfo
+        : $e->getMessage();
+
     http_response_code(500);
     echo json_encode([
         "success" => false,
-        "error" => "Email could not be sent by SMTP"
+        "error" => "Email could not be sent by SMTP",
+        "debug" => $debugMessage
     ]);
     exit();
 }
