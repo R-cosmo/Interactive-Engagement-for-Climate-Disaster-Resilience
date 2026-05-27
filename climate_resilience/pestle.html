@@ -69,6 +69,10 @@
         background: #f8faf9;
       }
 
+      .comparison-table td.empty-region {
+        color: transparent;
+      }
+
       .summary-bars {
         display: grid;
         gap: 14px;
@@ -372,8 +376,13 @@
       const dimensionFilter = document.getElementById('dimensionFilter');
       const regionFilter = document.getElementById('regionFilter');
       const resetFilters = document.getElementById('resetFilters');
-      const dimensionCards = document.querySelectorAll('[data-dimension]');
+      const dimensionCards = document.querySelectorAll('#dimensionCards [data-dimension]');
       const rows = document.querySelectorAll('#comparisonRows tr');
+      const regionLabels = {
+        australia: 'australia',
+        apec: 'apec region',
+        global: 'global'
+      };
 
       function applyFilters() {
         const selectedDimension = dimensionFilter.value;
@@ -389,15 +398,25 @@
           row.classList.toggle('hidden', !matchesDimension);
 
           row.querySelectorAll('td').forEach((cell) => {
+            if (!cell.dataset.originalHtml) {
+              cell.dataset.originalHtml = cell.innerHTML;
+            }
+
             cell.classList.remove('hidden');
+            cell.classList.remove('empty-region');
+            cell.innerHTML = cell.dataset.originalHtml;
           });
 
           if (selectedRegion !== 'all') {
             row.querySelectorAll('td').forEach((cell, index) => {
               const keepDimensionCell = index === 0;
               const label = cell.getAttribute('data-label').toLowerCase();
-              const keepRegionCell = label.includes(selectedRegion);
-              cell.classList.toggle('hidden', !keepDimensionCell && !keepRegionCell);
+              const keepRegionCell = label === regionLabels[selectedRegion];
+
+              if (!keepDimensionCell && !keepRegionCell) {
+                cell.innerHTML = '';
+                cell.classList.add('empty-region');
+              }
             });
           }
         });
