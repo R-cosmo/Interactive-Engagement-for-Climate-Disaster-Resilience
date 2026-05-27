@@ -12,36 +12,36 @@
     <h2>CR Climate Resilience</h2>
 
     <nav>
-        | <a href="home.html">Home</a> |
-        <a href="event.html">Events</a> |
-        <a href="blog.html">Blog</a> |
-        <a href="resources.html">Resources</a> |
-        <a href="regions.html">Regions</a> |
-        <a href="contribute.html">Contribute</a> |
-        <a href="pestle.html">PESTLE</a> |
-        <a href="about.html">About</a> |
-        <a href="contact.html">Contact</a> |
+      | <a href="home.html">Home</a> |
+      <a href="event.html">Events</a> |
+      <a href="blog.html">Blog</a> |
+      <a href="resources.html">Resources</a> |
+      <a href="regions.html">Regions</a> |
+      <a href="contribute.html">Contribute</a> |
+      <a href="pestle.html">PESTLE</a> |
+      <a href="about.html">About</a> |
+      <a href="contact.html">Contact</a> |
 
-        <span id="loginWrapper">
-            <a href="login.html">Login</a> |
-        </span>
+      <span id="loginWrapper">
+        <a href="login.html">Login</a> |
+      </span>
 
-        <span id="welcomeWrapper">
-            <strong id="welcomeText">Welcome, Guest</strong> |
-        </span>
+      <span id="welcomeWrapper">
+        <strong id="welcomeText">Welcome, Guest</strong> |
+      </span>
 
-        <span id="adminGo">
-            <a href="admin.html" id="adminLink">Admin</a> |
-        </span>
+      <span id="adminGo">
+        <a href="admin.html" id="adminLink">Admin</a> |
+      </span>
 
-        <span id="logoutWrapper">
-            <a href="logout.html" id="logoutLink">Logout</a>
-        </span>
+      <span id="logoutWrapper">
+        <a href="logout.html" id="logoutLink">Logout</a>
+      </span>
     </nav>
   </header>
 
   <main>
-    <section class="hero">
+    <section class="region-hero">
       <h1>Explore Regions</h1>
       <p>Learn how Australia, APEC, and global regions are responding to climate change and disaster resilience.</p>
     </section>
@@ -51,19 +51,19 @@
       <article class="region-card">
         <h2>Australia</h2>
         <p>Australia focuses on bushfire recovery, flood preparedness, heatwave response, and community disaster planning.</p>
-        <a href="#">Explore Australia</a>
+        <a href="pestle.html">Explore Australia</a>
       </article>
 
       <article class="region-card">
         <h2>APEC</h2>
         <p>APEC supports Asia-Pacific economies through climate cooperation, disaster preparedness, and regional resilience planning.</p>
-        <a href="#">Explore APEC</a>
+        <a href="pestle.html">Explore APEC</a>
       </article>
 
       <article class="region-card">
         <h2>Global</h2>
         <p>Global climate resilience focuses on reducing climate risks, improving emergency response, and supporting vulnerable communities.</p>
-        <a href="#">Explore Global</a>
+        <a href="pestle.html">Explore Global</a>
       </article>
 
     </section>
@@ -81,6 +81,7 @@
     const welcomeWrapper = document.getElementById("welcomeWrapper");
     const logoutWrapper = document.getElementById("logoutWrapper");
     const welcomeText = document.getElementById("welcomeText");
+    const adminGo = document.getElementById("adminGo");
 
     if (username) {
       welcomeText.textContent = "Welcome, " + username;
@@ -95,9 +96,9 @@
     }
 
     if (role === "admin") {
-      document.getElementById("adminGo").style.display = "inline";
+      adminGo.style.display = "inline";
     } else {
-      document.getElementById("adminGo").style.display = "none";
+      adminGo.style.display = "none";
     }
   </script>
 
