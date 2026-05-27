@@ -445,3 +445,20 @@ footer p {
     padding: 42px 22px;
   }
 }
+/* Region page title fix */
+
+.region-hero {
+  text-align: center;
+  background-color: #e8f5e9;
+  padding: 60px 20px;
+}
+
+.region-hero h1 {
+  font-size: 40px;
+  color: #2e7d32;
+}
+
+.region-hero p {
+  font-size: 18px;
+  color: #333;
+}
