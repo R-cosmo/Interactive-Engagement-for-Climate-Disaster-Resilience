@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Climate and Disaster Resilience</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header>
+    <h1>Climate Engage AU</h1>
+
+    <nav>
+        | <a href="home.html">Home</a> |
+        <a href="event.html">Events</a> |
+        <a href="blog.html">Blog</a> |
+        <a href="resources.html">Resources</a> |
+        <a href="contribute.html">Contribute</a> |
+        <a href="pestle.html">PESTLE</a> |
+        <a href="about.html">About</a> |
+        <a href="contact.html">Contact</a> |
+
+        <span id="loginWrapper">
+            <a href="login.html">Login</a> |
+        </span>
+
+        <span id="welcomeWrapper">
+            <strong id="welcomeText">Welcome, Guest</strong> |
+        </span>
+
+        <span id="adminGo">
+            <a href="admin.html" id="adminLink">Admin</a> |
+        </span>
+
+        <span id="logoutWrapper">
+            <a href="logout.html" id="logoutLink">Logout</a>
+        </span>
+    </nav>
+  </header>
+
+    <main>
+        <section>
+        <h2>Register</h2>
+        <p>Please fill in the form to create an account.</p>
+    
+        <form action="#" method="post">
+        <label>Username:</label><br>
+        <input type="text" name="username" required><br><br>
+    
+            <label for="email">Email:</label><br />
+            <input type="email" id="email" name="email" required /><br /><br />
+    
+            <label for="password">Password:</label><br />
+            <input type="password" id="password" name="password" required /><br /><br />
+    
+            <button type="submit">Register</button>
+            <button type="button" onclick="window.location.href='login.html'">Back to Login</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Climate and Disaster Resilience. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const username = localStorage.getItem("username");
+        const role = localStorage.getItem("role");
+
+        const loginWrapper = document.getElementById("loginWrapper");
+        const welcomeWrapper = document.getElementById("welcomeWrapper");
+        const logoutWrapper = document.getElementById("logoutWrapper");
+        const welcomeText = document.getElementById("welcomeText");
+
+        if (username) {
+            // Logged in
+            welcomeText.textContent = "Welcome, " + username;
+
+            loginWrapper.style.display = "none";   // hide Login + divider
+            logoutWrapper.style.display = "inline";
+        } else {
+            // Guest
+            welcomeText.textContent = "Welcome, Guest";
+
+            loginWrapper.style.display = "inline";
+            logoutWrapper.style.display = "none";  // hide Logout
+        }
+
+        if (role === "admin") {
+            document.getElementById("adminGo").style.display = "inline";
+        } else {
+            document.getElementById("adminGo").style.display = "none";
+        }
+        
+        document.querySelector("form").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const username = document.querySelector('input[name="username"]').value.trim();
+            const email = document.querySelector('input[name="email"]').value.trim();
+            const password = document.querySelector('input[name="password"]').value.trim();
+
+            try {
+                const response = await fetch("https://interactive-engagement-for-climate.onrender.com/register.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        email: email,
+                        password: password,
+                        role: "user"
+                    })
+                });
+
+                const data = await response.json();
+
+                // If server returns an error status, show the API error message.
+                if (!response.ok) {
+                    alert("Registration failed: " + (data.error || "Server error " + response.status));
+                    return;
+                }
+
+                // SUCCESS
+                if (data.success) {
+                    alert("Registration successful! Redirecting to login page.");
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                // FAILURE (API returned success:false)
+                alert("Registration failed: " + (data.error || "Unknown error"));
+
+            } catch (err) {
+                // NETWORK ERROR (CORS, server down, wrong URL, etc.)
+                alert("Network error: " + err.message);
+            }
+        });
+    </script>
+  </body>
+</html>

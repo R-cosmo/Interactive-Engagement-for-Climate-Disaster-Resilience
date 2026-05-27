@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logging out...</title>
+</head>
+<body>
+
+<script>
+    // Clear stored login info
+    localStorage.removeItem("username");
+    localStorage.removeItem("role");
+    sessionStorage.clear();
+
+    // Redirect to home page
+    window.location.replace("home.html");
+</script>
+
+</body>
+</html>

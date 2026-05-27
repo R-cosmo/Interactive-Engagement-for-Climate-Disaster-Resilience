@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PESTLE Explorer | Climate and Disaster Resilience</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .pestle-controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        align-items: end;
+      }
+
+      .pestle-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+      }
+
+      .pestle-card {
+        background: #f8faf9;
+        border: 1px solid #dce8df;
+        border-radius: 14px;
+        padding: 20px;
+      }
+
+      .pestle-card h3 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .pestle-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #198754;
+        color: #ffffff;
+        font-size: 1rem;
+      }
+
+      .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 14px;
+        overflow: hidden;
+        border-radius: 12px;
+      }
+
+      .comparison-table th,
+      .comparison-table td {
+        border: 1px solid #dce8df;
+        padding: 14px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .comparison-table th {
+        background: #0f5132;
+        color: #ffffff;
+      }
+
+      .comparison-table tr:nth-child(even) td {
+        background: #f8faf9;
+      }
+
+      .summary-bars {
+        display: grid;
+        gap: 14px;
+      }
+
+      .summary-item strong {
+        display: block;
+        margin-bottom: 6px;
+        color: #14532d;
+      }
+
+      .bar-track {
+        height: 14px;
+        background: #dce8df;
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .bar-fill {
+        height: 100%;
+        background: #198754;
+        border-radius: 999px;
+      }
+
+      .disclaimer {
+        border-left: 5px solid #bc7d66;
+        background: #fff8f5;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      @media (max-width: 760px) {
+        .comparison-table,
+        .comparison-table thead,
+        .comparison-table tbody,
+        .comparison-table th,
+        .comparison-table td,
+        .comparison-table tr {
+          display: block;
+        }
+
+        .comparison-table thead {
+          display: none;
+        }
+
+        .comparison-table td {
+          border-bottom: none;
+        }
+
+        .comparison-table td::before {
+          content: attr(data-label);
+          display: block;
+          font-weight: 700;
+          color: #14532d;
+          margin-bottom: 6px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Climate Engage AU</h1>
+
+      <nav>
+        | <a href="home.html">Home</a> |
+        <a href="event.html">Events</a> |
+        <a href="blog.html">Blog</a> |
+        <a href="resources.html">Resources</a> |
+        <a href="contribute.html">Contribute</a> |
+        <a href="pestle.html">PESTLE</a> |
+        <a href="about.html">About</a> |
+        <a href="contact.html">Contact</a> |
+
+        <span id="loginWrapper">
+            <a href="login.html">Login</a> |
+        </span>
+
+        <span id="welcomeWrapper">
+            <strong id="welcomeText">Welcome, Guest</strong> |
+        </span>
+
+        <span id="adminGo">
+            <a href="admin.html" id="adminLink">Admin</a> |
+        </span>
+
+        <span id="logoutWrapper">
+            <a href="logout.html" id="logoutLink">Logout</a>
+        </span>
+    </nav>
+    </header>
+
+    <main>
+      <section>
+        <h2>PESTLE Explorer</h2>
+        <p>
+          The PESTLE Explorer helps users compare climate resilience and disaster recovery
+          practices through Political, Economic, Social, Technological, Legal, and
+          Environmental dimensions. It supports structured learning across Australia,
+          the APEC region, and global contexts.
+        </p>
+      </section>
+
+
+      <section>
+        <h2>Compare by Dimension</h2>
+        <p>Select a dimension or region to focus the examples shown below.</p>
+
+        <div class="pestle-controls">
+          <div>
+            <label for="dimensionFilter">Dimension</label>
+            <select id="dimensionFilter">
+              <option value="all">All dimensions</option>
+              <option value="political">Political</option>
+              <option value="economic">Economic</option>
+              <option value="social">Social</option>
+              <option value="technological">Technological</option>
+              <option value="legal">Legal</option>
+              <option value="environmental">Environmental</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="regionFilter">Region</label>
+            <select id="regionFilter">
+              <option value="all">Australia, APEC, and Global</option>
+              <option value="australia">Australia focus</option>
+              <option value="apec">APEC focus</option>
+              <option value="global">Global focus</option>
+            </select>
+          </div>
+
+          <button type="button" id="resetFilters">Reset Filters</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>PESTLE Framework Dimensions</h2>
+
+        <div class="pestle-grid" id="dimensionCards">
+          <article class="pestle-card" data-dimension="political">
+            <h3><span class="pestle-icon">P</span> Political</h3>
+            <p>
+              Focuses on governance, national strategies, intergovernmental coordination,
+              emergency management roles, and public leadership during recovery.
+            </p>
+            <p><strong>Example indicator:</strong> Existence of disaster risk reduction strategies.</p>
+          </article>
+
+          <article class="pestle-card" data-dimension="economic">
+            <h3><span class="pestle-icon">E</span> Economic</h3>
+            <p>
+              Examines recovery funding, insurance, infrastructure investment, household
+              support, business continuity, and long-term economic resilience.
+            </p>
+            <p><strong>Example indicator:</strong> Availability of recovery grants and adaptation funding.</p>
+          </article>
+
+          <article class="pestle-card" data-dimension="social">
+            <h3><span class="pestle-icon">S</span> Social</h3>
+            <p>
+              Considers community networks, public education, inclusion, mental health,
+              local knowledge, and support for vulnerable groups.
+            </p>
+            <p><strong>Example indicator:</strong> Community preparedness and participation programs.</p>
+          </article>
+
+          <article class="pestle-card" data-dimension="technological">
+            <h3><span class="pestle-icon">T</span> Technological</h3>
+            <p>
+              Reviews early warning systems, mapping tools, data sharing, digital platforms,
+              communication systems, and innovation in resilience planning.
+            </p>
+            <p><strong>Example indicator:</strong> Use of alert systems and risk mapping tools.</p>
+          </article>
+
+          <article class="pestle-card" data-dimension="legal">
+            <h3><span class="pestle-icon">L</span> Legal</h3>
+            <p>
+              Looks at planning rules, building standards, emergency powers, risk disclosure,
+              insurance regulation, and responsibilities during disaster response.
+            </p>
+            <p><strong>Example indicator:</strong> Climate-aware land-use and building regulations.</p>
+          </article>
+
+          <article class="pestle-card" data-dimension="environmental">
+            <h3><span class="pestle-icon">E</span> Environmental</h3>
+            <p>
+              Explores ecosystem protection, nature-based solutions, biodiversity, water
+              security, heat risk, bushfire risk, floodplain management, and restoration.
+            </p>
+            <p><strong>Example indicator:</strong> Use of nature-based adaptation measures.</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>Comparative Matrix</h2>
+        <p>
+          This matrix gives simplified examples of how resilience and recovery practices
+          may be compared across three contexts.
+        </p>
+
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Australia</th>
+              <th>APEC Region</th>
+              <th>Global</th>
+            </tr>
+          </thead>
+          <tbody id="comparisonRows">
+            <tr data-dimension="political">
+              <td data-label="Dimension"><strong>Political</strong></td>
+              <td data-label="Australia">National and state disaster frameworks, emergency services, and local council planning.</td>
+              <td data-label="APEC Region">Regional cooperation, knowledge sharing, and cross-border resilience initiatives.</td>
+              <td data-label="Global">International frameworks, climate agreements, and disaster risk reduction agendas.</td>
+            </tr>
+            <tr data-dimension="economic">
+              <td data-label="Dimension"><strong>Economic</strong></td>
+              <td data-label="Australia">Recovery grants, infrastructure rebuilding, insurance discussions, and local business support.</td>
+              <td data-label="APEC Region">Investment in resilient infrastructure, trade continuity, and regional economic recovery planning.</td>
+              <td data-label="Global">Climate finance, adaptation funds, humanitarian aid, and development assistance.</td>
+            </tr>
+            <tr data-dimension="social">
+              <td data-label="Dimension"><strong>Social</strong></td>
+              <td data-label="Australia">Community preparedness, volunteer networks, Indigenous knowledge, and public safety messaging.</td>
+              <td data-label="APEC Region">Community-based disaster risk reduction and culturally diverse preparedness programs.</td>
+              <td data-label="Global">Public education, inclusion, local knowledge, migration, health, and social protection systems.</td>
+            </tr>
+            <tr data-dimension="technological">
+              <td data-label="Dimension"><strong>Technological</strong></td>
+              <td data-label="Australia">Emergency alert systems, hazard maps, climate data portals, and digital communication tools.</td>
+              <td data-label="APEC Region">Shared monitoring tools, early warning cooperation, and technology transfer.</td>
+              <td data-label="Global">Satellite monitoring, international data platforms, modelling tools, and open science resources.</td>
+            </tr>
+            <tr data-dimension="legal">
+              <td data-label="Dimension"><strong>Legal</strong></td>
+              <td data-label="Australia">Building codes, planning controls, emergency legislation, and environmental approvals.</td>
+              <td data-label="APEC Region">Different legal systems with shared interest in risk-informed planning and standards.</td>
+              <td data-label="Global">International agreements, disaster law guidance, human rights, and environmental governance.</td>
+            </tr>
+            <tr data-dimension="environmental">
+              <td data-label="Dimension"><strong>Environmental</strong></td>
+              <td data-label="Australia">Bushfire management, floodplain planning, coastal adaptation, and ecosystem restoration.</td>
+              <td data-label="APEC Region">Typhoon, flood, heat, coastal, and food security risks across diverse economies.</td>
+              <td data-label="Global">Nature-based solutions, biodiversity protection, water security, and climate adaptation planning.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>How to Use This Explorer</h2>
+        <ol>
+          <li>Choose a PESTLE dimension to focus on one type of resilience factor.</li>
+          <li>Compare Australia, APEC, and global examples in the matrix.</li>
+          <li>Use the indicators as prompts for research, discussion, or stakeholder engagement.</li>
+          <li>Check official and current sources before using any information for policy or planning.</li>
+        </ol>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Climate and Disaster Resilience. All rights reserved.</p>
+    </footer>
+
+    <script>
+      const username = localStorage.getItem("username");
+      const role = localStorage.getItem("role");
+
+      const loginWrapper = document.getElementById("loginWrapper");
+      const welcomeWrapper = document.getElementById("welcomeWrapper");
+      const logoutWrapper = document.getElementById("logoutWrapper");
+      const welcomeText = document.getElementById("welcomeText");
+
+      if (username) {
+        // Logged in
+        welcomeText.textContent = "Welcome, " + username;
+
+        loginWrapper.style.display = "none";   // hide Login + divider
+        logoutWrapper.style.display = "inline";
+      } else {
+        // Guest
+        welcomeText.textContent = "Welcome, Guest";
+
+        loginWrapper.style.display = "inline";
+        logoutWrapper.style.display = "none";  // hide Logout
+      }
+
+      if (role === "admin") {
+        document.getElementById("adminGo").style.display = "inline";
+      } else {
+        document.getElementById("adminGo").style.display = "none";
+      }
+
+      const dimensionFilter = document.getElementById('dimensionFilter');
+      const regionFilter = document.getElementById('regionFilter');
+      const resetFilters = document.getElementById('resetFilters');
+      const dimensionCards = document.querySelectorAll('[data-dimension]');
+      const rows = document.querySelectorAll('#comparisonRows tr');
+
+      function applyFilters() {
+        const selectedDimension = dimensionFilter.value;
+        const selectedRegion = regionFilter.value;
+
+        dimensionCards.forEach((item) => {
+          const matchesDimension = selectedDimension === 'all' || item.dataset.dimension === selectedDimension;
+          item.classList.toggle('hidden', !matchesDimension);
+        });
+
+        rows.forEach((row) => {
+          const matchesDimension = selectedDimension === 'all' || row.dataset.dimension === selectedDimension;
+          row.classList.toggle('hidden', !matchesDimension);
+
+          row.querySelectorAll('td').forEach((cell) => {
+            cell.classList.remove('hidden');
+          });
+
+          if (selectedRegion !== 'all') {
+            row.querySelectorAll('td').forEach((cell, index) => {
+              const keepDimensionCell = index === 0;
+              const label = cell.getAttribute('data-label').toLowerCase();
+              const keepRegionCell = label.includes(selectedRegion);
+              cell.classList.toggle('hidden', !keepDimensionCell && !keepRegionCell);
+            });
+          }
+        });
+      }
+
+      dimensionFilter.addEventListener('change', applyFilters);
+      regionFilter.addEventListener('change', applyFilters);
+
+      resetFilters.addEventListener('click', () => {
+        dimensionFilter.value = 'all';
+        regionFilter.value = 'all';
+        applyFilters();
+      });
+    </script>
+  </body>
+</html>

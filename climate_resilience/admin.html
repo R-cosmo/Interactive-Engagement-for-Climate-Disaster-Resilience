@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | Climate Engage AU</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .admin-panel {
+      display: grid;
+      gap: 24px;
+    }
+
+    .admin-form {
+      max-width: 820px;
+    }
+
+    .admin-form textarea {
+      min-height: 160px;
+    }
+
+    .admin-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .status-message {
+      margin-top: 14px;
+      font-weight: 700;
+    }
+
+    main {
+      padding-right: 260px;
+      scroll-behavior: smooth;
+    }
+
+    .admin-scroll-nav {
+      position: fixed;
+      top: 150px;
+      right: 28px;
+      width: 220px;
+      max-height: calc(100vh - 190px);
+      overflow-y: auto;
+      border-left: 1px solid #d8d8d8;
+      background: rgba(255, 255, 255, 0.94);
+      padding: 8px 0;
+      z-index: 20;
+    }
+
+    .admin-scroll-nav ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .admin-scroll-nav a {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 10px;
+      align-items: center;
+      min-height: 42px;
+      color: #4a4a4a;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 0 12px 0 22px;
+      position: relative;
+    }
+
+    .admin-scroll-nav a::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 12px solid #6f98ff;
+      opacity: 0;
+    }
+
+    .admin-scroll-nav a:hover,
+    .admin-scroll-nav a.active {
+      background: #f4f4f4;
+      color: #6f98ff;
+    }
+
+    .admin-scroll-nav a.active::before {
+      opacity: 1;
+    }
+
+    .admin-scroll-nav .nav-number {
+      font-size: 1.15rem;
+      color: inherit;
+    }
+
+    .admin-panel {
+      scroll-margin-top: 24px;
+    }
+
+    .event-admin-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .event-list,
+    .application-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .event-admin-card,
+    .application-card {
+      background: #ffffff;
+      border: 1px solid #ddd8cf;
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .event-admin-card h3,
+    .application-card h3 {
+      margin-top: 0;
+    }
+
+    .event-meta,
+    .application-meta {
+      display: grid;
+      gap: 6px;
+      color: #4d5b52;
+      margin: 12px 0;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        padding-right: 0;
+      }
+
+      .admin-scroll-nav {
+        position: static;
+        width: auto;
+        max-height: none;
+        margin: 18px auto;
+        border-left: none;
+        border-bottom: 1px solid #d8d8d8;
+      }
+
+      .admin-scroll-nav ol {
+        display: flex;
+        overflow-x: auto;
+      }
+
+      .admin-scroll-nav a {
+        min-width: 180px;
+      }
+
+      .event-admin-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const storedUsername = localStorage.getItem("username");
+    const storedRole = localStorage.getItem("role");
+
+    if (!storedUsername || storedRole !== "admin") {
+      alert("Admin access only.");
+      window.location.replace("login.html");
+    }
+  </script>
+
+  <header>
+    <h1>Climate Engage AU</h1>
+    <nav>
+      | <a href="admin.html">Admin Dashboard</a> |
+      <a href="home.html">Home</a> |
+      <a href="blog.html">Blog Page</a> |
+      <a href="event.html">Event Page</a> |
+      <a href="logout.html">Logout</a>
+    </nav>
+  </header>
+
+  <aside class="admin-scroll-nav" aria-label="Admin sections">
+    <ol>
+      <li>
+        <a class="admin-scroll-link active" href="#blogAdmin">
+          <span class="nav-number">1</span>
+          <span>Create Blog Post</span>
+        </a>
+      </li>
+      <li>
+        <a class="admin-scroll-link" href="#eventAdmin">
+          <span class="nav-number">2</span>
+          <span>Events</span>
+        </a>
+      </li>
+      <li>
+        <a class="admin-scroll-link" href="#eventApplications">
+          <span class="nav-number">3</span>
+          <span>Event Applications</span>
+        </a>
+      </li>
+    </ol>
+  </aside>
+
+  <main>
+    <section>
+      <h2>Admin Panel</h2>
+      <p id="adminGreeting">Only admins can see this page.</p>
+    </section>
+
+    <section id="blogAdmin" class="admin-panel">
+      <div>
+        <h2>Create Blog Post</h2>
+        <p>Create a new blog post and save it to the MongoDB blogs collection.</p>
+      </div>
+
+      <form id="blogForm" class="admin-form" action="#" method="post">
+        <label for="blogTitle">Title *</label>
+        <input type="text" id="blogTitle" name="title" required />
+
+        <label for="blogSummary">Summary *</label>
+        <textarea id="blogSummary" name="summary" rows="4" required></textarea>
+
+        <label for="blogContent">Content *</label>
+        <textarea id="blogContent" name="content" rows="10" required></textarea>
+
+        <label for="blogAuthor">Author *</label>
+        <input type="text" id="blogAuthor" name="author" required />
+
+        <label for="blogCategory">Category *</label>
+        <select id="blogCategory" name="category" required>
+          <option value="">Select a category</option>
+          <option value="Climate Action">Climate Action</option>
+          <option value="Disaster Resilience">Disaster Resilience</option>
+          <option value="Sustainability">Sustainability</option>
+          <option value="Community">Community</option>
+          <option value="Research and Policy">Research and Policy</option>
+        </select>
+
+        <label for="blogTags">Tags</label>
+        <input type="text" id="blogTags" name="tags" placeholder="resilience, climate risk, community" />
+
+        <button type="submit">Create Blog</button>
+        <p id="blogMessage" class="status-message" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section id="eventAdmin" class="admin-panel">
+      <div>
+        <h2>Events</h2>
+        <p>Create events, edit existing events, and manage what appears in the events collection.</p>
+      </div>
+
+      <div class="event-admin-grid">
+        <form id="eventForm" class="admin-form" action="#" method="post">
+          <input type="hidden" id="eventId" />
+
+          <label for="eventTitle">Title *</label>
+          <input type="text" id="eventTitle" name="title" required />
+
+          <label for="eventDescription">Description *</label>
+          <textarea id="eventDescription" name="description" rows="6" required></textarea>
+
+          <label for="eventType">Event Type *</label>
+          <select id="eventType" name="event_type" required>
+            <option value="">Select a type</option>
+            <option value="in-person">in-person</option>
+            <option value="webinar">webinar</option>
+            <option value="hybrid">hybrid</option>
+          </select>
+
+          <label for="eventLocation">Location *</label>
+          <input type="text" id="eventLocation" name="location" required />
+
+          <label for="eventDate">Event Date *</label>
+          <input type="date" id="eventDate" name="event_date" required />
+
+          <label for="eventStartTime">Start Time</label>
+          <input type="text" id="eventStartTime" name="start_time" placeholder="9:30 am" />
+
+          <label for="eventRegistrationLink">Registration Link</label>
+          <input type="url" id="eventRegistrationLink" name="registration_link" placeholder="https://example.com/register" />
+
+          <label for="eventStatus">Status</label>
+          <select id="eventStatus" name="status">
+            <option value="upcoming">upcoming</option>
+            <option value="past">past</option>
+            <option value="cancelled">cancelled</option>
+          </select>
+
+          <div class="admin-actions">
+            <button type="submit" id="eventSubmitButton">Create Event</button>
+            <button type="button" id="eventCancelEdit">Cancel Edit</button>
+          </div>
+
+          <p id="eventMessage" class="status-message" aria-live="polite"></p>
+        </form>
+
+        <div>
+          <h2>Existing Events</h2>
+          <div id="eventList" class="event-list" aria-live="polite">
+            <p>Loading events...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="eventApplications" class="admin-panel">
+      <div>
+        <h2>Event Applications</h2>
+        <p>Review users who applied to join upcoming events.</p>
+      </div>
+
+      <div id="applicationList" class="application-list" aria-live="polite">
+        <p>Loading event applications...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Climate Engage AU. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const API_BASE = "https://interactive-engagement-for-climate.onrender.com";
+    const username = localStorage.getItem("username") || "Admin";
+    const blogForm = document.getElementById("blogForm");
+    const blogMessage = document.getElementById("blogMessage");
+    const eventForm = document.getElementById("eventForm");
+    const eventMessage = document.getElementById("eventMessage");
+    const eventList = document.getElementById("eventList");
+    const eventSubmitButton = document.getElementById("eventSubmitButton");
+    const eventCancelEdit = document.getElementById("eventCancelEdit");
+    const applicationList = document.getElementById("applicationList");
+    const scrollLinks = Array.from(document.querySelectorAll(".admin-scroll-link"));
+    const scrollSections = scrollLinks
+      .map((link) => document.querySelector(link.getAttribute("href")))
+      .filter(Boolean);
+
+    let loadedEvents = [];
+
+    document.getElementById("adminGreeting").textContent = "Welcome, " + username + ".";
+    document.getElementById("blogAuthor").value = username;
+    eventCancelEdit.style.display = "none";
+
+    function updateActiveScrollLink() {
+      let activeId = scrollSections[0] ? scrollSections[0].id : "";
+
+      scrollSections.forEach((section) => {
+        const sectionTop = section.getBoundingClientRect().top;
+        if (sectionTop <= 180) {
+          activeId = section.id;
+        }
+      });
+
+      scrollLinks.forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("href") === "#" + activeId);
+      });
+    }
+
+    scrollLinks.forEach((link) => {
+      link.addEventListener("click", function (event) {
+        const target = document.querySelector(link.getAttribute("href"));
+        if (!target) {
+          return;
+        }
+
+        event.preventDefault();
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    window.addEventListener("scroll", updateActiveScrollLink);
+    updateActiveScrollLink();
+
+    blogForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const payload = {
+        title: document.getElementById("blogTitle").value.trim(),
+        summary: document.getElementById("blogSummary").value.trim(),
+        content: document.getElementById("blogContent").value.trim(),
+        author: document.getElementById("blogAuthor").value.trim(),
+        category: document.getElementById("blogCategory").value,
+        tags: document.getElementById("blogTags").value.trim()
+      };
+
+      if (!payload.title || !payload.summary || !payload.content || !payload.author || !payload.category) {
+        blogMessage.textContent = "Please complete all required fields.";
+        blogMessage.style.color = "#842029";
+        return;
+      }
+
+      blogMessage.textContent = "Creating blog post...";
+      blogMessage.style.color = "#244032";
+
+      try {
+        const response = await fetch(API_BASE + "/blog.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || "Blog creation failed");
+        }
+
+        blogMessage.textContent = "Blog post created successfully.";
+        blogMessage.style.color = "#0f5132";
+        blogForm.reset();
+        document.getElementById("blogAuthor").value = username;
+      } catch (error) {
+        blogMessage.textContent = error.message || "Blog creation failed. Please try again later.";
+        blogMessage.style.color = "#842029";
+      }
+    });
+
+    function setEventFormMode(eventItem) {
+      document.getElementById("eventId").value = eventItem ? eventItem.id : "";
+      document.getElementById("eventTitle").value = eventItem ? eventItem.title : "";
+      document.getElementById("eventDescription").value = eventItem ? eventItem.description : "";
+      document.getElementById("eventType").value = eventItem ? eventItem.event_type : "";
+      document.getElementById("eventLocation").value = eventItem ? eventItem.location : "";
+      document.getElementById("eventDate").value = eventItem ? eventItem.event_date : "";
+      document.getElementById("eventStartTime").value = eventItem ? eventItem.start_time : "";
+      document.getElementById("eventRegistrationLink").value = eventItem ? eventItem.registration_link : "";
+      document.getElementById("eventStatus").value = eventItem ? eventItem.status || "upcoming" : "upcoming";
+
+      eventSubmitButton.textContent = eventItem ? "Update Event" : "Create Event";
+      eventCancelEdit.style.display = eventItem ? "inline-block" : "none";
+      eventMessage.textContent = "";
+    }
+
+    function getEventPayload() {
+      const payload = {
+        title: document.getElementById("eventTitle").value.trim(),
+        description: document.getElementById("eventDescription").value.trim(),
+        event_type: document.getElementById("eventType").value,
+        location: document.getElementById("eventLocation").value.trim(),
+        event_date: document.getElementById("eventDate").value,
+        start_time: document.getElementById("eventStartTime").value.trim(),
+        registration_link: document.getElementById("eventRegistrationLink").value.trim(),
+        status: document.getElementById("eventStatus").value
+      };
+
+      const eventId = document.getElementById("eventId").value;
+      if (eventId) {
+        payload.id = eventId;
+      }
+
+      return payload;
+    }
+
+    function renderEvents(events) {
+      eventList.innerHTML = "";
+
+      if (!events.length) {
+        const emptyMessage = document.createElement("p");
+        emptyMessage.textContent = "No events found.";
+        eventList.appendChild(emptyMessage);
+        return;
+      }
+
+      events.forEach((eventItem) => {
+        const card = document.createElement("article");
+        card.className = "event-admin-card";
+
+        const title = document.createElement("h3");
+        title.textContent = eventItem.title || "Untitled event";
+        card.appendChild(title);
+
+        const description = document.createElement("p");
+        description.textContent = eventItem.description || "";
+        card.appendChild(description);
+
+        const meta = document.createElement("div");
+        meta.className = "event-meta";
+
+        const date = document.createElement("span");
+        date.textContent = "Date: " + (eventItem.event_date || "Not set");
+        meta.appendChild(date);
+
+        const type = document.createElement("span");
+        type.textContent = "Type: " + (eventItem.event_type || "Not set");
+        meta.appendChild(type);
+
+        const location = document.createElement("span");
+        location.textContent = "Location: " + (eventItem.location || "Not set");
+        meta.appendChild(location);
+
+        const status = document.createElement("span");
+        status.textContent = "Status: " + (eventItem.status || "upcoming");
+        meta.appendChild(status);
+
+        card.appendChild(meta);
+
+        const editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.textContent = "Edit Event";
+        editButton.addEventListener("click", () => {
+          setEventFormMode(eventItem);
+          document.getElementById("eventAdmin").scrollIntoView({ behavior: "smooth" });
+        });
+        card.appendChild(editButton);
+
+        eventList.appendChild(card);
+      });
+    }
+
+    async function loadEvents() {
+      try {
+        const response = await fetch(API_BASE + "/event.php");
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || "Could not load events");
+        }
+
+        loadedEvents = data.events || [];
+        renderEvents(loadedEvents);
+      } catch (error) {
+        eventList.innerHTML = "";
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent = error.message || "Could not load events.";
+        eventList.appendChild(errorMessage);
+      }
+    }
+
+    eventForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const payload = getEventPayload();
+      const isEditing = Boolean(payload.id);
+
+      if (!payload.title || !payload.description || !payload.event_type || !payload.location || !payload.event_date) {
+        eventMessage.textContent = "Please complete all required event fields.";
+        eventMessage.style.color = "#842029";
+        return;
+      }
+
+      eventMessage.textContent = isEditing ? "Updating event..." : "Creating event...";
+      eventMessage.style.color = "#244032";
+
+      try {
+        const response = await fetch(API_BASE + "/event.php", {
+          method: isEditing ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || "Event save failed");
+        }
+
+        eventMessage.textContent = isEditing ? "Event updated successfully." : "Event created successfully.";
+        eventMessage.style.color = "#0f5132";
+        eventForm.reset();
+        setEventFormMode(null);
+        await loadEvents();
+      } catch (error) {
+        eventMessage.textContent = error.message || "Event save failed. Please try again later.";
+        eventMessage.style.color = "#842029";
+      }
+    });
+
+    eventCancelEdit.addEventListener("click", function () {
+      eventForm.reset();
+      setEventFormMode(null);
+    });
+
+    function formatApplicationDate(value) {
+      if (!value) {
+        return "Unknown date";
+      }
+
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) {
+        return "Unknown date";
+      }
+
+      return date.toLocaleString();
+    }
+
+    function renderApplications(applications) {
+      applicationList.innerHTML = "";
+
+      if (!applications.length) {
+        const emptyMessage = document.createElement("p");
+        emptyMessage.textContent = "No event applications yet.";
+        applicationList.appendChild(emptyMessage);
+        return;
+      }
+
+      applications.forEach((application) => {
+        const card = document.createElement("article");
+        card.className = "application-card";
+
+        const title = document.createElement("h3");
+        title.textContent = application.event_title || "Untitled event";
+        card.appendChild(title);
+
+        const meta = document.createElement("div");
+        meta.className = "application-meta";
+
+        const name = document.createElement("span");
+        name.textContent = "Applicant: " + (application.name || "Unknown");
+        meta.appendChild(name);
+
+        const email = document.createElement("span");
+        email.textContent = "Email: " + (application.email || "Not provided");
+        meta.appendChild(email);
+
+        const status = document.createElement("span");
+        status.textContent = "Status: " + (application.status || "pending");
+        meta.appendChild(status);
+
+        const createdAt = document.createElement("span");
+        createdAt.textContent = "Applied: " + formatApplicationDate(application.created_at);
+        meta.appendChild(createdAt);
+
+        card.appendChild(meta);
+
+        if (application.message) {
+          const message = document.createElement("p");
+          message.textContent = application.message;
+          card.appendChild(message);
+        }
+
+        applicationList.appendChild(card);
+      });
+    }
+
+    async function loadApplications() {
+      try {
+        const response = await fetch(API_BASE + "/event_applications.php");
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || "Could not load event applications");
+        }
+
+        renderApplications(data.applications || []);
+      } catch (error) {
+        applicationList.innerHTML = "";
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent = error.message || "Could not load event applications.";
+        applicationList.appendChild(errorMessage);
+      }
+    }
+
+    loadEvents();
+    loadApplications();
+  </script>
+</body>
+</html>
