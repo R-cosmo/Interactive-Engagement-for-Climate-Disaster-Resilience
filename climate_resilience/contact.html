@@ -407,18 +407,21 @@
       messageBox.textContent = 'Sending your enquiry...';
 
       try {
+        const formData = new FormData();
+        formData.append('fullName', fullName);
+        formData.append('email', email);
+        formData.append('organisation', organisation);
+        formData.append('subject', subject);
+        formData.append('message', message);
+
+        const attachment = document.getElementById('attachment').files[0];
+        if (attachment) {
+          formData.append('attachment', attachment);
+        }
+
         const response = await fetch('https://interactive-engagement-for-climate.onrender.com/contact.php', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            fullName: fullName,
-            email: email,
-            organisation: organisation,
-            subject: subject,
-            message: message
-          })
+          body: formData
         });
 
         const data = await response.json();
