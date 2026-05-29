@@ -1,11 +1,11 @@
 <?php
-require 'vendor/autoload.php';
+require __DIR__ . "/vendor/autoload.php";
 
 // ===== CORS 设置 =====
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
 // 处理浏览器预检请求（必须有）
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -17,6 +17,48 @@ try {
     // ===== 连接 MongoDB =====
     $client = new MongoDB\Client("mongodb+srv://zihengchen1_db_user:Password123!@cluster0.exqvqaj.mongodb.net/?retryWrites=true&w=majority");
     $collection = $client->climate_db->contributions;
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $cursor = $collection->find([], [
+            "sort" => ["created_at" => -1]
+        ]);
+
+        $contributions = [];
+
+        foreach ($cursor as $contribution) {
+            $createdAt = $contribution["created_at"] ?? null;
+
+            $contributions[] = [
+                "id" => (string)$contribution["_id"],
+                "name" => $contribution["name"] ?? "",
+                "email" => $contribution["email"] ?? "",
+                "organisation" => $contribution["organisation"] ?? "",
+                "contribution_type" => $contribution["contribution_type"] ?? "",
+                "region" => $contribution["region"] ?? "",
+                "title" => $contribution["title"] ?? "",
+                "description" => $contribution["description"] ?? "",
+                "status" => $contribution["status"] ?? "pending",
+                "created_at" => $createdAt instanceof MongoDB\BSON\UTCDateTime
+                    ? $createdAt->toDateTime()->format(DateTimeInterface::ATOM)
+                    : ""
+            ];
+        }
+
+        echo json_encode([
+            "success" => true,
+            "contributions" => $contributions
+        ]);
+        exit();
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        echo json_encode([
+            "success" => false,
+            "error" => "Method not allowed"
+        ]);
+        exit();
+    }
 
     // ===== 获取 JSON 数据 =====
     $data = json_decode(file_get_contents("php://input"), true);

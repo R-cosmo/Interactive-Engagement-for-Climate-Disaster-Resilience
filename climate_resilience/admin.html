@@ -108,12 +108,14 @@
     }
 
     .event-list,
+    .contribution-list,
     .application-list {
       display: grid;
       gap: 16px;
     }
 
     .event-admin-card,
+    .contribution-card,
     .application-card {
       background: #ffffff;
       border: 1px solid #ddd8cf;
@@ -123,11 +125,13 @@
     }
 
     .event-admin-card h3,
+    .contribution-card h3,
     .application-card h3 {
       margin-top: 0;
     }
 
     .event-meta,
+    .contribution-meta,
     .application-meta {
       display: grid;
       gap: 6px;
@@ -204,6 +208,12 @@
         <a class="admin-scroll-link" href="#eventApplications">
           <span class="nav-number">3</span>
           <span>Event Applications</span>
+        </a>
+      </li>
+      <li>
+        <a class="admin-scroll-link" href="#contributionAdmin">
+          <span class="nav-number">4</span>
+          <span>Contribution Form</span>
         </a>
       </li>
     </ol>
@@ -322,6 +332,17 @@
         <p>Loading event applications...</p>
       </div>
     </section>
+
+    <section id="contributionAdmin" class="admin-panel">
+      <div>
+        <h2>Contribution Form</h2>
+        <p>Review submissions sent from the Contribute page.</p>
+      </div>
+
+      <div id="contributionList" class="contribution-list" aria-live="polite">
+        <p>Loading contribution submissions...</p>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -339,6 +360,7 @@
     const eventSubmitButton = document.getElementById("eventSubmitButton");
     const eventCancelEdit = document.getElementById("eventCancelEdit");
     const applicationList = document.getElementById("applicationList");
+    const contributionList = document.getElementById("contributionList");
     const scrollLinks = Array.from(document.querySelectorAll(".admin-scroll-link"));
     const scrollSections = scrollLinks
       .map((link) => document.querySelector(link.getAttribute("href")))
@@ -663,8 +685,86 @@
       }
     }
 
+    function renderContributions(contributions) {
+      contributionList.innerHTML = "";
+
+      if (!contributions.length) {
+        const emptyMessage = document.createElement("p");
+        emptyMessage.textContent = "No contribution submissions yet.";
+        contributionList.appendChild(emptyMessage);
+        return;
+      }
+
+      contributions.forEach((contribution) => {
+        const card = document.createElement("article");
+        card.className = "contribution-card";
+
+        const title = document.createElement("h3");
+        title.textContent = contribution.title || "Untitled submission";
+        card.appendChild(title);
+
+        const meta = document.createElement("div");
+        meta.className = "contribution-meta";
+
+        const name = document.createElement("span");
+        name.textContent = "Name: " + (contribution.name || "Unknown");
+        meta.appendChild(name);
+
+        const email = document.createElement("span");
+        email.textContent = "Email: " + (contribution.email || "Not provided");
+        meta.appendChild(email);
+
+        const organisation = document.createElement("span");
+        organisation.textContent = "Organisation: " + (contribution.organisation || "Not provided");
+        meta.appendChild(organisation);
+
+        const type = document.createElement("span");
+        type.textContent = "Type: " + (contribution.contribution_type || "Not set");
+        meta.appendChild(type);
+
+        const region = document.createElement("span");
+        region.textContent = "Region: " + (contribution.region || "Not set");
+        meta.appendChild(region);
+
+        const status = document.createElement("span");
+        status.textContent = "Status: " + (contribution.status || "pending");
+        meta.appendChild(status);
+
+        const createdAt = document.createElement("span");
+        createdAt.textContent = "Submitted: " + formatApplicationDate(contribution.created_at);
+        meta.appendChild(createdAt);
+
+        card.appendChild(meta);
+
+        const description = document.createElement("p");
+        description.textContent = contribution.description || "";
+        card.appendChild(description);
+
+        contributionList.appendChild(card);
+      });
+    }
+
+    async function loadContributions() {
+      try {
+        const response = await fetch(API_BASE + "/submit.php");
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || "Could not load contribution submissions");
+        }
+
+        renderContributions(data.contributions || []);
+      } catch (error) {
+        contributionList.innerHTML = "";
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent = error.message || "Could not load contribution submissions.";
+        contributionList.appendChild(errorMessage);
+      }
+    }
+
     loadEvents();
     loadApplications();
+    loadContributions();
   </script>
 </body>
 </html>
