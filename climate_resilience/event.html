@@ -6,6 +6,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Events | Climate and Disaster Resilience</title>
     <style>
+      .event-tabs {
+        display: inline-flex;
+        background: #eeece7;
+        border-radius: 8px;
+        padding: 4px;
+        margin-bottom: 28px;
+      }
+
+      .event-tab {
+        background: transparent;
+        color: #5f665f;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 18px;
+        margin: 0;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .event-tab.active {
+        background: #ffffff;
+        color: #1f2933;
+        box-shadow: 0 2px 8px rgba(15, 81, 50, 0.12);
+      }
+
+      .event-tab:hover {
+        transform: none;
+        background: #ffffff;
+      }
+
+      .event-list {
+        display: grid;
+        gap: 24px;
+      }
+
+      .event-card {
+        display: grid;
+        grid-template-columns: 90px 1fr;
+        gap: 22px;
+        align-items: start;
+        background: #ffffff;
+        border: 1px solid #ddd8cf;
+        border-radius: 14px;
+        padding: 28px;
+        box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
+      }
+
+      .event-date-box {
+        background: #e5e8e2;
+        border-radius: 8px;
+        text-align: center;
+        padding: 14px 8px;
+        color: #314b37;
+      }
+
+      .event-date-box .month {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .event-date-box .day {
+        display: block;
+        font-size: 2.2rem;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+
+      .event-date-box .year {
+        display: block;
+        font-size: 0.9rem;
+        color: #6a756b;
+      }
+
+      .event-card-content {
+        margin-top: 0;
+      }
+
+      .event-card-content h3 {
+        margin-top: 10px;
+        color: #1f2933;
+        font-size: 1.25rem;
+      }
+
+      .event-badge {
+        display: inline-block;
+        background: #ead8ff;
+        color: #8b3fd0;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+      }
+
+      .event-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        color: #6b716d;
+        margin: 16px 0;
+      }
+
+      .event-register {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #174826;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        font-weight: 700;
+      }
+
+      .event-register:hover {
+        background: #0f3320;
+      }
+
+      .event-section {
+        display: none;
+      }
+
+      .event-section.active {
+        display: block;
+      }
+
       .event-cta {
         background: #bc7d66;
         color: #ffffff;
@@ -54,8 +182,27 @@
         background: #f3f3f3;
         transform: translateY(-2px);
       }
+
+      @media (max-width: 700px) {
+        .event-card {
+          grid-template-columns: 1fr;
+        }
+
+        .event-date-box {
+          max-width: 100px;
+        }
+
+        .event-tabs {
+          width: 100%;
+        }
+
+        .event-tab {
+          flex: 1;
+        }
+      }
     </style>
   </head>
+
   <body>
     <header>
       <h1>Climate Engage AU</h1>
@@ -65,6 +212,7 @@
         <a href="event.html">Events</a> |
         <a href="blog.html">Blog</a> |
         <a href="resources.html">Resources</a> |
+        <a href="regions.html">Regions</a> |
         <a href="contribute.html">Contribute</a> |
         <a href="pestle.html">PESTLE</a> |
         <a href="about.html">About</a> |
@@ -99,77 +247,137 @@
       </section>
 
       <section>
-        <h2>Upcoming Events</h2>
+        <div class="event-tabs" aria-label="Event categories">
+          <button class="event-tab active" type="button" data-target="upcomingEvents">
+            Upcoming (3)
+          </button>
+          <button class="event-tab" type="button" data-target="pastEvents">
+            Past Events (2)
+          </button>
+        </div>
 
-        <article>
-          <h3>Climate Disaster Resilience Workshop</h3>
-          <p><strong>Date:</strong> 15 May 2026</p>
-          <p><strong>Location:</strong> Sydney, NSW</p>
-          <p><strong>Mode:</strong> In-person</p>
-          <p>
-            A community workshop focused on preparing for climate-related
-            disasters such as floods, bushfires, storms, and heatwaves.
-          </p>
-          <a href="event-detail.html">View Event Details</a>
-          <br />
-          <a href="registration.html">Register Interest</a>
-        </article>
+        <div id="upcomingEvents" class="event-section active">
+          <div class="event-list">
+            <article class="event-card">
+              <div class="event-date-box">
+                <span class="month">May</span>
+                <span class="day">15</span>
+                <span class="year">2026</span>
+              </div>
 
-        <article>
-          <h3>Sustainability and Local Action Webinar</h3>
-          <p><strong>Date:</strong> 28 May 2026</p>
-          <p><strong>Location:</strong> Online</p>
-          <p><strong>Mode:</strong> Webinar</p>
-          <p>
-            An online discussion about practical sustainability actions for
-            households, schools, businesses, and local communities.
-          </p>
-          <a href="event-detail.html">View Event Details</a>
-          <br />
-          <a href="registration.html">Register Interest</a>
-        </article>
+              <div class="event-card-content">
+                <span class="event-badge">in-person</span>
+                <h3>Climate Disaster Resilience Workshop</h3>
+                <p>
+                  A community workshop focused on preparing for climate-related disasters
+                  such as floods, bushfires, storms, and heatwaves.
+                </p>
+                <div class="event-meta">
+                  <span>📍 Sydney, Australia</span>
+                  <span>🕘 9:30 am</span>
+                  <span>📅 15 May</span>
+                </div>
+                <a class="event-register" href="event-detail.html?id=resilience-workshop">Register</a>
+              </div>
+            </article>
 
-        <article>
-          <h3>Community Climate Engagement Talk</h3>
-          <p><strong>Date:</strong> 12 June 2026</p>
-          <p><strong>Location:</strong> Melbourne, VIC</p>
-          <p><strong>Mode:</strong> In-person and online</p>
-          <p>
-            A public talk about climate education, community engagement, and
-            improving access to reliable climate information.
-          </p>
-          <a href="event-detail.html">View Event Details</a>
-          <br />
-          <a href="registration.html">Register Interest</a>
-        </article>
-      </section>
+            <article class="event-card">
+              <div class="event-date-box">
+                <span class="month">May</span>
+                <span class="day">28</span>
+                <span class="year">2026</span>
+              </div>
 
-      <section>
-        <h2>Past Events</h2>
+              <div class="event-card-content">
+                <span class="event-badge">webinar</span>
+                <h3>Sustainability and Local Action Webinar</h3>
+                <p>
+                  An online discussion about practical sustainability actions for
+                  households, schools, businesses, and local communities.
+                </p>
+                <div class="event-meta">
+                  <span>📍 Online</span>
+                  <span>🕘 11:00 am</span>
+                  <span>📅 28 May</span>
+                </div>
+                <a class="event-register" href="event-detail.html?id=local-action-webinar">Register</a>
+              </div>
+            </article>
 
-        <article>
-          <h3>Climate Awareness Community Forum</h3>
-          <p><strong>Date:</strong> 20 March 2026</p>
-          <p><strong>Location:</strong> Brisbane, QLD</p>
-          <p><strong>Mode:</strong> In-person</p>
-          <p>
-            A public forum where community members discussed climate risks,
-            adaptation strategies, and local sustainability projects.
-          </p>
-          <a href="event-detail.html">View Event Summary</a>
-        </article>
+            <article class="event-card">
+              <div class="event-date-box">
+                <span class="month">June</span>
+                <span class="day">12</span>
+                <span class="year">2026</span>
+              </div>
 
-        <article>
-          <h3>Online Talk: Preparing for Extreme Weather</h3>
-          <p><strong>Date:</strong> 5 April 2026</p>
-          <p><strong>Location:</strong> Online</p>
-          <p><strong>Mode:</strong> Webinar</p>
-          <p>
-            A webinar about preparing households and communities for extreme
-            weather events linked to climate change.
-          </p>
-          <a href="event-detail.html">View Event Summary</a>
-        </article>
+              <div class="event-card-content">
+                <span class="event-badge">hybrid</span>
+                <h3>Community Climate Engagement Talk</h3>
+                <p>
+                  A public talk about climate education, community engagement, and
+                  improving access to reliable climate information.
+                </p>
+                <div class="event-meta">
+                  <span>📍 Melbourne, Australia</span>
+                  <span>🕘 2:00 pm</span>
+                  <span>📅 12 June</span>
+                </div>
+                <a class="event-register" href="event-detail.html?id=climate-engagement-talk">Register</a>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div id="pastEvents" class="event-section">
+          <div class="event-list">
+            <article class="event-card">
+              <div class="event-date-box">
+                <span class="month">Mar</span>
+                <span class="day">20</span>
+                <span class="year">2026</span>
+              </div>
+
+              <div class="event-card-content">
+                <span class="event-badge">in-person</span>
+                <h3>Climate Awareness Community Forum</h3>
+                <p>
+                  A public forum where community members discussed climate risks,
+                  adaptation strategies, and local sustainability projects.
+                </p>
+                <div class="event-meta">
+                  <span>📍 Brisbane, Australia</span>
+                  <span>🕘 10:00 am</span>
+                  <span>📅 20 March</span>
+                </div>
+                <a class="event-register" href="event-detail.html?id=climate-awareness-forum">View Summary</a>
+              </div>
+            </article>
+
+            <article class="event-card">
+              <div class="event-date-box">
+                <span class="month">Apr</span>
+                <span class="day">5</span>
+                <span class="year">2026</span>
+              </div>
+
+              <div class="event-card-content">
+                <span class="event-badge">webinar</span>
+                <h3>Online Talk: Preparing for Extreme Weather</h3>
+                <p>
+                  A webinar about preparing households and communities for extreme
+                  weather events linked to climate change.
+                </p>
+                <div class="event-meta">
+                  <span>📍 Online</span>
+                  <span>🕘 1:00 pm</span>
+                  <span>📅 5 April</span>
+                </div>
+                <a class="event-register" href="event-detail.html?id=extreme-weather-talk">View Summary</a>
+              </div>
+            </article>
+          </div>
+        </div>
       </section>
 
       <section class="event-cta">
@@ -182,20 +390,21 @@
         <a href="contact.html" class="event-cta-button">Contact Us</a>
       </section>
 
-            <section>
-              <h2>Webinars and Talks</h2>
+      <section>
+        <h2>Webinars and Talks</h2>
 
-              <p>
-                Some Climate Engage AU events may be delivered online as webinars or
-                talks. Online event links will be shared with registered participants
-                before the event date.
-              </p>
-            </section>
-          </main>
+        <p>
+          Some Climate Engage AU events may be delivered online as webinars or
+          talks. Online event links will be shared with registered participants
+          before the event date.
+        </p>
+      </section>
+    </main>
 
     <footer>
       <p>&copy; 2026 Climate Engage AU. All rights reserved.</p>
     </footer>
+
     <script>
       const username = localStorage.getItem("username");
       const role = localStorage.getItem("role");
@@ -204,26 +413,38 @@
       const welcomeWrapper = document.getElementById("welcomeWrapper");
       const logoutWrapper = document.getElementById("logoutWrapper");
       const welcomeText = document.getElementById("welcomeText");
+      const adminGo = document.getElementById("adminGo");
 
       if (username) {
-        // Logged in
         welcomeText.textContent = "Welcome, " + username;
-
-        loginWrapper.style.display = "none";   // hide Login + divider
+        loginWrapper.style.display = "none";
+        welcomeWrapper.style.display = "inline";
         logoutWrapper.style.display = "inline";
       } else {
-        // Guest
         welcomeText.textContent = "Welcome, Guest";
-
         loginWrapper.style.display = "inline";
-        logoutWrapper.style.display = "none";  // hide Logout
+        welcomeWrapper.style.display = "inline";
+        logoutWrapper.style.display = "none";
       }
 
       if (role === "admin") {
-        document.getElementById("adminGo").style.display = "inline";
+        adminGo.style.display = "inline";
       } else {
-        document.getElementById("adminGo").style.display = "none";
+        adminGo.style.display = "none";
       }
+
+      const tabs = document.querySelectorAll('.event-tab');
+      const sections = document.querySelectorAll('.event-section');
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          tabs.forEach((item) => item.classList.remove('active'));
+          sections.forEach((section) => section.classList.remove('active'));
+
+          tab.classList.add('active');
+          document.getElementById(tab.dataset.target).classList.add('active');
+        });
+      });
     </script>
   </body>
 </html>

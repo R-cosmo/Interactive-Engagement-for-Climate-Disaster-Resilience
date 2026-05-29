@@ -1,3 +1,117 @@
+/* Regions Page */
+
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #e8f5e9;
+}
+
+.hero h1 {
+  font-size: 40px;
+  color: #2e7d32;
+}
+
+.hero p {
+  font-size: 18px;
+  color: #333;
+}
+
+.regions-container {
+  display: flex;
+  gap: 25px;
+  padding: 50px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.region-card {
+  width: 300px;
+  padding: 25px;
+  border-radius: 12px;
+  background-color: #f2f7f4;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.region-card h2 {
+  color: #2e7d32;
+  margin-bottom: 12px;
+}
+
+.region-card p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.region-card a {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 18px;
+  background-color: #2e7d32;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+.region-card a:hover {
+  background-color: #256428;
+}
+/* Resources Page */
+
+main section {
+  padding: 30px 50px;
+}
+
+main section:first-child {
+  text-align: center;
+  background-color: #e8f5e9;
+  padding: 60px 20px;
+}
+
+main section:first-child h1 {
+  font-size: 40px;
+  color: #2e7d32;
+}
+
+main section:first-child p {
+  font-size: 18px;
+  color: #333;
+}
+
+input,
+select {
+  padding: 12px;
+  margin: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+article {
+  background-color: #f2f7f4;
+  padding: 25px;
+  margin: 20px 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+article h2 {
+  color: #2e7d32;
+}
+
+article a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 18px;
+  background-color: #2e7d32;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+article a:hover {
+  background-color: #256428;
+}
 /* ---------- Global Reset ---------- */
 * {
   box-sizing: border-box;
@@ -61,6 +175,11 @@ nav {
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
+}
+
+#adminGo,
+#logoutWrapper {
+  display: none;
 }
 
 nav a,
@@ -325,4 +444,21 @@ footer p {
   section[name="hero"] {
     padding: 42px 22px;
   }
+}
+/* Region page title fix */
+
+.region-hero {
+  text-align: center;
+  background-color: #e8f5e9;
+  padding: 60px 20px;
+}
+
+.region-hero h1 {
+  font-size: 40px;
+  color: #2e7d32;
+}
+
+.region-hero p {
+  font-size: 18px;
+  color: #333;
 }

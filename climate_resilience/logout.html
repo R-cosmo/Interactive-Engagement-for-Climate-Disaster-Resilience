@@ -9,9 +9,10 @@
     // Clear stored login info
     localStorage.removeItem("username");
     localStorage.removeItem("role");
+    sessionStorage.clear();
 
     // Redirect to home page
-    window.location.href = "home.html";
+    window.location.replace("home.html");
 </script>
 
 </body>

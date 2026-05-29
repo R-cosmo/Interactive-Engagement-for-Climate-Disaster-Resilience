@@ -15,6 +15,7 @@
         <a href="event.html">Events</a> |
         <a href="blog.html">Blog</a> |
         <a href="resources.html">Resources</a> |
+        <a href="regions.html">Regions</a> |
         <a href="contribute.html">Contribute</a> |
         <a href="pestle.html">PESTLE</a> |
         <a href="about.html">About</a> |
@@ -65,6 +66,50 @@
           <br /><br />
 
           <button type="submit">Search</button>
+        </form>
+      </section>
+
+      <section>
+        <h2>Published Blog Posts</h2>
+        <div id="blogList">
+          <p>Loading blog posts...</p>
+        </div>
+      </section>
+
+      <section id="editBlogSection" style="display: none;">
+        <h2>Edit Blog Post</h2>
+
+        <form id="editBlogForm" action="#" method="post">
+          <input type="hidden" id="editBlogId" />
+
+          <label for="editBlogTitle">Title *</label>
+          <input type="text" id="editBlogTitle" required />
+
+          <label for="editBlogSummary">Summary *</label>
+          <textarea id="editBlogSummary" rows="4" required></textarea>
+
+          <label for="editBlogContent">Content *</label>
+          <textarea id="editBlogContent" rows="10" required></textarea>
+
+          <label for="editBlogAuthor">Author *</label>
+          <input type="text" id="editBlogAuthor" required />
+
+          <label for="editBlogCategory">Category *</label>
+          <select id="editBlogCategory" required>
+            <option value="">Select a category</option>
+            <option value="Climate Action">Climate Action</option>
+            <option value="Disaster Resilience">Disaster Resilience</option>
+            <option value="Sustainability">Sustainability</option>
+            <option value="Community">Community</option>
+            <option value="Research and Policy">Research and Policy</option>
+          </select>
+
+          <label for="editBlogTags">Tags</label>
+          <input type="text" id="editBlogTags" />
+
+          <button type="submit">Save Changes</button>
+          <button type="button" id="cancelEditBlog">Cancel</button>
+          <p id="editBlogMessage" aria-live="polite"></p>
         </form>
       </section>
 
@@ -156,27 +201,6 @@
         </article>
       </section>
 
-      <section>
-        <h2>Publishing Workflow</h2>
-
-        <ol>
-          <li>Author drafts a blog post.</li>
-          <li>Admin reviews the content for accuracy and relevance.</li>
-          <li>Post is edited if needed.</li>
-          <li>Post is approved for publication.</li>
-          <li>Published post appears on the blog listing page.</li>
-        </ol>
-      </section>
-
-      <section>
-        <h2>Moderated Publishing Process</h2>
-
-        <p>
-          All submitted blog posts are reviewed before publication. Content must
-          be respectful, relevant, accurate, and suitable for public climate
-          engagement.
-        </p>
-      </section>
     </main>
 
     <footer>
@@ -211,6 +235,164 @@
         } else {
             document.getElementById("adminGo").style.display = "none";
         }
+
+        const blogList = document.getElementById("blogList");
+        const editBlogSection = document.getElementById("editBlogSection");
+        const editBlogForm = document.getElementById("editBlogForm");
+        const editBlogMessage = document.getElementById("editBlogMessage");
+        let loadedBlogs = [];
+
+        function renderBlogs(blogs) {
+            blogList.textContent = "";
+
+            if (!blogs.length) {
+                const emptyMessage = document.createElement("p");
+                emptyMessage.textContent = "No blog posts have been published yet.";
+                blogList.appendChild(emptyMessage);
+                return;
+            }
+
+            blogs.forEach((blog) => {
+                const article = document.createElement("article");
+
+                const title = document.createElement("h3");
+                title.textContent = blog.title;
+                article.appendChild(title);
+
+                const summary = document.createElement("p");
+                summary.textContent = blog.summary;
+                article.appendChild(summary);
+
+                const author = document.createElement("p");
+                const authorLabel = document.createElement("strong");
+                authorLabel.textContent = "Author:";
+                author.appendChild(authorLabel);
+                author.append(" " + blog.author);
+                article.appendChild(author);
+
+                const category = document.createElement("p");
+                const categoryLabel = document.createElement("strong");
+                categoryLabel.textContent = "Category:";
+                category.appendChild(categoryLabel);
+                category.append(" " + blog.category);
+                article.appendChild(category);
+
+                const tags = document.createElement("p");
+                const tagsLabel = document.createElement("strong");
+                tagsLabel.textContent = "Tags:";
+                tags.appendChild(tagsLabel);
+                tags.append(" " + (Array.isArray(blog.tags) ? blog.tags.join(", ") : ""));
+                article.appendChild(tags);
+
+                const content = document.createElement("p");
+                content.textContent = blog.content;
+                article.appendChild(content);
+
+                if (role === "admin") {
+                    const editButton = document.createElement("button");
+                    editButton.type = "button";
+                    editButton.textContent = "Edit";
+                    editButton.addEventListener("click", () => startEditBlog(blog.id));
+                    article.appendChild(editButton);
+                }
+
+                blogList.appendChild(article);
+            });
+        }
+
+        async function loadBlogs() {
+            try {
+                const response = await fetch("https://interactive-engagement-for-climate.onrender.com/blog.php");
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.error || "Could not load blog posts");
+                }
+
+                loadedBlogs = data.blogs || [];
+                renderBlogs(loadedBlogs);
+            } catch (error) {
+                blogList.innerHTML = "";
+                const errorMessage = document.createElement("p");
+                errorMessage.textContent = error.message || "Could not load blog posts.";
+                blogList.appendChild(errorMessage);
+            }
+        }
+
+        function startEditBlog(blogId) {
+            const blog = loadedBlogs.find((item) => item.id === blogId);
+            if (!blog || role !== "admin") {
+                return;
+            }
+
+            document.getElementById("editBlogId").value = blog.id;
+            document.getElementById("editBlogTitle").value = blog.title;
+            document.getElementById("editBlogSummary").value = blog.summary;
+            document.getElementById("editBlogContent").value = blog.content;
+            document.getElementById("editBlogAuthor").value = blog.author;
+            document.getElementById("editBlogCategory").value = blog.category;
+            document.getElementById("editBlogTags").value = Array.isArray(blog.tags) ? blog.tags.join(", ") : "";
+            editBlogMessage.textContent = "";
+            editBlogSection.style.display = "block";
+            editBlogSection.scrollIntoView({ behavior: "smooth" });
+        }
+
+        document.getElementById("cancelEditBlog").addEventListener("click", () => {
+            editBlogSection.style.display = "none";
+            editBlogForm.reset();
+            editBlogMessage.textContent = "";
+        });
+
+        editBlogForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            if (role !== "admin") {
+                editBlogMessage.textContent = "Admin access only.";
+                editBlogMessage.style.color = "#842029";
+                return;
+            }
+
+            const payload = {
+                id: document.getElementById("editBlogId").value,
+                title: document.getElementById("editBlogTitle").value.trim(),
+                summary: document.getElementById("editBlogSummary").value.trim(),
+                content: document.getElementById("editBlogContent").value.trim(),
+                author: document.getElementById("editBlogAuthor").value.trim(),
+                category: document.getElementById("editBlogCategory").value,
+                tags: document.getElementById("editBlogTags").value.trim()
+            };
+
+            if (!payload.title || !payload.summary || !payload.content || !payload.author || !payload.category) {
+                editBlogMessage.textContent = "Please complete all required fields.";
+                editBlogMessage.style.color = "#842029";
+                return;
+            }
+
+            try {
+                const response = await fetch("https://interactive-engagement-for-climate.onrender.com/blog.php", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.error || "Could not update blog post");
+                }
+
+                editBlogMessage.textContent = "Blog post updated successfully.";
+                editBlogMessage.style.color = "#0f5132";
+                await loadBlogs();
+            } catch (error) {
+                editBlogMessage.textContent = error.message || "Could not update blog post.";
+                editBlogMessage.style.color = "#842029";
+            }
+        });
+
+        loadBlogs();
     </script>
   </body>
 </html>

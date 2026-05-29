@@ -16,12 +16,27 @@
         <a href="event.html">Events</a> |
         <a href="blog.html">Blog</a> |
         <a href="resources.html">Resources</a> |
+        <a href="regions.html">Regions</a> |
         <a href="contribute.html">Contribute</a> |
         <a href="pestle.html">PESTLE</a> |
         <a href="about.html">About</a> |
         <a href="contact.html">Contact</a> |
 
-        <a href="login.html">Login</a> |
+        <span id="loginWrapper">
+            <a href="login.html">Login</a> |
+        </span>
+
+        <span id="welcomeWrapper">
+            <strong id="welcomeText">Welcome, Guest</strong> |
+        </span>
+
+        <span id="adminGo">
+            <a href="admin.html" id="adminLink">Admin</a> |
+        </span>
+
+        <span id="logoutWrapper">
+            <a href="logout.html" id="logoutLink">Logout</a>
+        </span>
     </nav>
   </header>
 
@@ -30,7 +45,7 @@
         <h2>Register</h2>
         <p>Please fill in the form to create an account.</p>
     
-        <form action="register.php" method="post">
+        <form action="#" method="post">
         <label>Username:</label><br>
         <input type="text" name="username" required><br><br>
     
@@ -51,6 +66,33 @@
     </footer>
 
     <script>
+        const username = localStorage.getItem("username");
+        const role = localStorage.getItem("role");
+
+        const loginWrapper = document.getElementById("loginWrapper");
+        const welcomeWrapper = document.getElementById("welcomeWrapper");
+        const logoutWrapper = document.getElementById("logoutWrapper");
+        const welcomeText = document.getElementById("welcomeText");
+
+        if (username) {
+            // Logged in
+            welcomeText.textContent = "Welcome, " + username;
+
+            loginWrapper.style.display = "none";   // hide Login + divider
+            logoutWrapper.style.display = "inline";
+        } else {
+            // Guest
+            welcomeText.textContent = "Welcome, Guest";
+
+            loginWrapper.style.display = "inline";
+            logoutWrapper.style.display = "none";  // hide Logout
+        }
+
+        if (role === "admin") {
+            document.getElementById("adminGo").style.display = "inline";
+        } else {
+            document.getElementById("adminGo").style.display = "none";
+        }
         
         document.querySelector("form").addEventListener("submit", async function (event) {
             event.preventDefault();
@@ -73,13 +115,13 @@
                     })
                 });
 
-                // If server returns non-JSON or error status
+                const data = await response.json();
+
+                // If server returns an error status, show the API error message.
                 if (!response.ok) {
-                    alert("Server error: " + response.status);
+                    alert("Registration failed: " + (data.error || "Server error " + response.status));
                     return;
                 }
-
-                const data = await response.json();
 
                 // SUCCESS
                 if (data.success) {
