@@ -35,6 +35,7 @@ try {
                 "category" => $blog["category"] ?? "",
                 "tags" => $blog["tags"] ?? [],
                 "status" => $blog["status"] ?? "published",
+                "is_featured" => (bool) ($blog["is_featured"] ?? false),
                 "created_at" => $createdAt instanceof MongoDB\BSON\UTCDateTime
                     ? $createdAt->toDateTime()->format(DateTimeInterface::ATOM)
                     : ""
@@ -109,6 +110,7 @@ try {
                     "category" => $data["category"],
                     "tags" => $tags,
                     "status" => "published",
+                    "is_featured" => !empty($data["is_featured"]),
                     "updated_at" => new MongoDB\BSON\UTCDateTime()
                 ]
             ]
@@ -130,6 +132,7 @@ try {
         "category" => $data["category"],
         "tags" => $tags,
         "status" => "published",
+        "is_featured" => !empty($data["is_featured"]),
         "created_at" => new MongoDB\BSON\UTCDateTime()
     ]);
 

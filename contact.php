@@ -18,7 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit();
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
+$contentType = $_SERVER["CONTENT_TYPE"] ?? "";
+$isMultipart = stripos($contentType, "multipart/form-data") !== false;
+$data = $isMultipart ? $_POST : json_decode(file_get_contents("php://input"), true);
 
 if (!$data) {
     http_response_code(400);
@@ -34,6 +36,7 @@ $email = trim($data["email"] ?? "");
 $organisation = trim($data["organisation"] ?? "");
 $subject = trim($data["subject"] ?? "");
 $message = trim($data["message"] ?? "");
+$attachment = $_FILES["attachment"] ?? null;
 
 if ($fullName === "" || $email === "" || $subject === "" || $message === "") {
     http_response_code(400);
@@ -87,6 +90,57 @@ $payload = [
     "subject" => $safeSubject,
     "text" => $emailBody
 ];
+
+if ($attachment && ($attachment["error"] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+    if ($attachment["error"] !== UPLOAD_ERR_OK) {
+        http_response_code(400);
+        echo json_encode([
+            "success" => false,
+            "error" => "Attachment upload failed"
+        ]);
+        exit();
+    }
+
+    $maxAttachmentSize = 5 * 1024 * 1024;
+    if ($attachment["size"] > $maxAttachmentSize) {
+        http_response_code(400);
+        echo json_encode([
+            "success" => false,
+            "error" => "Attachment must be 5MB or smaller"
+        ]);
+        exit();
+    }
+
+    $allowedExtensions = ["pdf", "doc", "docx", "jpg", "jpeg", "png"];
+    $originalFileName = basename($attachment["name"]);
+    $extension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
+
+    if (!in_array($extension, $allowedExtensions, true)) {
+        http_response_code(400);
+        echo json_encode([
+            "success" => false,
+            "error" => "Attachment file type is not allowed"
+        ]);
+        exit();
+    }
+
+    $fileContent = file_get_contents($attachment["tmp_name"]);
+    if ($fileContent === false) {
+        http_response_code(400);
+        echo json_encode([
+            "success" => false,
+            "error" => "Attachment could not be read"
+        ]);
+        exit();
+    }
+
+    $payload["attachments"] = [
+        [
+            "filename" => $originalFileName,
+            "content" => base64_encode($fileContent)
+        ]
+    ];
+}
 
 $context = stream_context_create([
     "http" => [
