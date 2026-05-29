@@ -249,7 +249,7 @@
       <section>
         <div class="event-tabs" aria-label="Event categories">
           <button class="event-tab active" type="button" data-target="upcomingEvents">
-            Upcoming (3)
+            Upcoming (0)
           </button>
           <button class="event-tab" type="button" data-target="pastEvents">
             Past Events (2)
@@ -257,75 +257,8 @@
         </div>
 
         <div id="upcomingEvents" class="event-section active">
-          <div class="event-list">
-            <article class="event-card">
-              <div class="event-date-box">
-                <span class="month">May</span>
-                <span class="day">15</span>
-                <span class="year">2026</span>
-              </div>
-
-              <div class="event-card-content">
-                <span class="event-badge">in-person</span>
-                <h3>Climate Disaster Resilience Workshop</h3>
-                <p>
-                  A community workshop focused on preparing for climate-related disasters
-                  such as floods, bushfires, storms, and heatwaves.
-                </p>
-                <div class="event-meta">
-                  <span>📍 Sydney, Australia</span>
-                  <span>🕘 9:30 am</span>
-                  <span>📅 15 May</span>
-                </div>
-                <a class="event-register" href="event-detail.html?id=resilience-workshop">Register</a>
-              </div>
-            </article>
-
-            <article class="event-card">
-              <div class="event-date-box">
-                <span class="month">May</span>
-                <span class="day">28</span>
-                <span class="year">2026</span>
-              </div>
-
-              <div class="event-card-content">
-                <span class="event-badge">webinar</span>
-                <h3>Sustainability and Local Action Webinar</h3>
-                <p>
-                  An online discussion about practical sustainability actions for
-                  households, schools, businesses, and local communities.
-                </p>
-                <div class="event-meta">
-                  <span>📍 Online</span>
-                  <span>🕘 11:00 am</span>
-                  <span>📅 28 May</span>
-                </div>
-                <a class="event-register" href="event-detail.html?id=local-action-webinar">Register</a>
-              </div>
-            </article>
-
-            <article class="event-card">
-              <div class="event-date-box">
-                <span class="month">June</span>
-                <span class="day">12</span>
-                <span class="year">2026</span>
-              </div>
-
-              <div class="event-card-content">
-                <span class="event-badge">hybrid</span>
-                <h3>Community Climate Engagement Talk</h3>
-                <p>
-                  A public talk about climate education, community engagement, and
-                  improving access to reliable climate information.
-                </p>
-                <div class="event-meta">
-                  <span>📍 Melbourne, Australia</span>
-                  <span>🕘 2:00 pm</span>
-                  <span>📅 12 June</span>
-                </div>
-                <a class="event-register" href="event-detail.html?id=climate-engagement-talk">Register</a>
-              </div>
-            </article>
+          <div class="event-list" id="upcomingEventList">
+            <p id="emptyUpcomingMessage">No upcoming events have been added yet.</p>
           </div>
         </div>
 
@@ -435,6 +368,147 @@
 
       const tabs = document.querySelectorAll('.event-tab');
       const sections = document.querySelectorAll('.event-section');
+      const upcomingTab = document.querySelector('[data-target="upcomingEvents"]');
+      const upcomingEventList = document.getElementById('upcomingEventList');
+      const emptyUpcomingMessage = document.getElementById('emptyUpcomingMessage');
+
+      function formatEventDateParts(value) {
+        const date = new Date(value + 'T00:00:00');
+
+        if (!value || Number.isNaN(date.getTime())) {
+          return {
+            month: 'TBA',
+            day: '',
+            year: ''
+          };
+        }
+
+        return {
+          month: date.toLocaleString('en', { month: 'short' }),
+          day: String(date.getDate()),
+          year: String(date.getFullYear())
+        };
+      }
+
+      function formatEventDateLabel(value) {
+        const date = new Date(value + 'T00:00:00');
+
+        if (!value || Number.isNaN(date.getTime())) {
+          return 'Date TBA';
+        }
+
+        return date.toLocaleDateString('en', {
+          day: 'numeric',
+          month: 'short'
+        });
+      }
+
+      function createUpcomingEventCard(eventItem) {
+        const dateParts = formatEventDateParts(eventItem.event_date);
+        const article = document.createElement('article');
+        article.className = 'event-card';
+
+        const dateBox = document.createElement('div');
+        dateBox.className = 'event-date-box';
+
+        const month = document.createElement('span');
+        month.className = 'month';
+        month.textContent = dateParts.month;
+        dateBox.appendChild(month);
+
+        const day = document.createElement('span');
+        day.className = 'day';
+        day.textContent = dateParts.day;
+        dateBox.appendChild(day);
+
+        const year = document.createElement('span');
+        year.className = 'year';
+        year.textContent = dateParts.year;
+        dateBox.appendChild(year);
+
+        article.appendChild(dateBox);
+
+        const content = document.createElement('div');
+        content.className = 'event-card-content';
+
+        const badge = document.createElement('span');
+        badge.className = 'event-badge';
+        badge.textContent = eventItem.event_type || 'event';
+        content.appendChild(badge);
+
+        const title = document.createElement('h3');
+        title.textContent = eventItem.title || 'Untitled event';
+        content.appendChild(title);
+
+        const description = document.createElement('p');
+        description.textContent = eventItem.description || '';
+        content.appendChild(description);
+
+        const meta = document.createElement('div');
+        meta.className = 'event-meta';
+
+        const location = document.createElement('span');
+        location.textContent = 'Location: ' + (eventItem.location || 'TBA');
+        meta.appendChild(location);
+
+        const time = document.createElement('span');
+        time.textContent = 'Time: ' + (eventItem.start_time || 'TBA');
+        meta.appendChild(time);
+
+        const date = document.createElement('span');
+        date.textContent = 'Date: ' + formatEventDateLabel(eventItem.event_date);
+        meta.appendChild(date);
+
+        content.appendChild(meta);
+
+        const link = document.createElement('a');
+        link.className = 'event-register';
+        link.href = eventItem.registration_link || ('event-detail.html?id=' + encodeURIComponent(eventItem.id));
+        link.textContent = 'Register';
+        content.appendChild(link);
+
+        article.appendChild(content);
+        return article;
+      }
+
+      function renderUpcomingEvents(events) {
+        upcomingEventList.innerHTML = '';
+
+        if (!events.length) {
+          upcomingEventList.appendChild(emptyUpcomingMessage);
+          emptyUpcomingMessage.style.display = 'block';
+        } else {
+          emptyUpcomingMessage.style.display = 'none';
+          events.forEach((eventItem) => {
+            upcomingEventList.appendChild(createUpcomingEventCard(eventItem));
+          });
+        }
+
+        upcomingTab.textContent = 'Upcoming (' + events.length + ')';
+      }
+
+      async function loadUpcomingEvents() {
+        try {
+          const response = await fetch('https://interactive-engagement-for-climate.onrender.com/event.php');
+          const data = await response.json();
+
+          if (!response.ok || !data.success) {
+            throw new Error(data.error || 'Could not load events');
+          }
+
+          const upcomingEvents = (data.events || []).filter((eventItem) => {
+            return (eventItem.status || 'upcoming') === 'upcoming';
+          });
+
+          renderUpcomingEvents(upcomingEvents);
+        } catch (error) {
+          upcomingEventList.innerHTML = '';
+          const errorMessage = document.createElement('p');
+          errorMessage.textContent = error.message || 'Could not load upcoming events.';
+          upcomingEventList.appendChild(errorMessage);
+          upcomingTab.textContent = 'Upcoming (0)';
+        }
+      }
 
       tabs.forEach((tab) => {
         tab.addEventListener('click', () => {
@@ -445,6 +519,8 @@
           document.getElementById(tab.dataset.target).classList.add('active');
         });
       });
+
+      loadUpcomingEvents();
     </script>
   </body>
 </html>
