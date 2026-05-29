@@ -1,38 +1,32 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-  <title>About - Climate Resilience Platform</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<header>
-  <h1>Climate Engage AU</h1>
-  <nav>
-        | <a href="home.html">Home</a> |
-        <a href="event.html">Events</a> |
-        <a href="blog.html">Blog</a> |
-        <a href="resources.html">Resources</a> |
+  <head>
+    <title>About - Climate Resilience Platform</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Climate Engage AU</h1>
+      <nav>
+        | <a href="home.html">Home</a> | <a href="event.html">Events</a> |
+        <a href="blog.html">Blog</a> | <a href="resources.html">Resources</a> |
         <a href="regions.html">Regions</a> |
         <a href="contribute.html">Contribute</a> |
-        <a href="pestle.html">PESTLE</a> |
-        <a href="about.html">About</a> |
+        <a href="pestle.html">PESTLE</a> | <a href="about.html">About</a> |
         <a href="contact.html">Contact</a> |
 
-        <span id="loginWrapper">
-            <a href="login.html">Login</a> |
-        </span>
+        <span id="loginWrapper"> <a href="login.html">Login</a> | </span>
 
         <span id="welcomeWrapper">
-            <strong id="welcomeText">Welcome, Guest</strong> |
+          <strong id="welcomeText">Welcome, Guest</strong> |
         </span>
 
         <span id="adminGo">
-            <a href="admin.html" id="adminLink">Admin</a> |
+          <a href="admin.html" id="adminLink">Admin</a> |
         </span>
 
         <span id="logoutWrapper">
-            <a href="logout.html" id="logoutLink">Logout</a>
+          <a href="logout.html" id="logoutLink">Logout</a>
         </span>
     </nav>
 </header>
@@ -109,19 +103,19 @@
         // Logged in
         welcomeText.textContent = "Welcome, " + username;
 
-        loginWrapper.style.display = "none";   // hide Login + divider
+        loginWrapper.style.display = "none"; // hide Login + divider
         logoutWrapper.style.display = "inline";
-    } else {
+      } else {
         // Guest
         welcomeText.textContent = "Welcome, Guest";
 
         loginWrapper.style.display = "inline";
-        logoutWrapper.style.display = "none";  // hide Logout
-    }
+        logoutWrapper.style.display = "none"; // hide Logout
+      }
 
-    if (role === "admin") {
+      if (role === "admin") {
         document.getElementById("adminGo").style.display = "inline";
-    } else {
+      } else {
         document.getElementById("adminGo").style.display = "none";
     }
 </script>
