@@ -5,6 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Climate and Disaster Resilience</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .login-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 0;
+    }
+
+    .login-box {
+      width: 360px;
+      background: #ffffff;
+      padding: 28px 32px;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(20, 83, 45, 0.12);
+    }
+
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .login-box p {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0 18px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .login-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-register {
+      background: #2e8645;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .btn-register:hover {
+      background: #0bd771;
+    }
+  </style>
 </head>
 
 <body>
@@ -35,24 +88,28 @@
     </nav>
   </header>
 
-  <main>
-    <section>
-      <h2>Login</h2>
-      <p>Please enter your username and password.</p>
+  <main class="login-wrapper">
+    <div class="login-box">
+        <h2>Login</h2>
+        <p>Please enter your username and password.</p>
 
-    <form action="login_api.php" method="post">
-    <label>Username:</label><br>
-    <input type="text" name="username" required><br><br>
+        <form id="loginForm">
+            <label>Username:</label>
+            <input type="text" name="username" required>
 
-        <label for="password">Password:</label><br />
-        <input type="password" id="password" name="password" required /><br /><br />
+            <label>Password:</label>
+            <input type="password" name="password" required>
 
-        <button type="submit">Login</button>
-        <a href="register.html" class="btn-register">Register</a>
-      </form>
+            <div class="login-buttons">
+                <button type="submit">Login</button>
+                <a href="register.html" class="btn-register">Register</a>
+            </div>
+        </form>
 
-      <p>Admin login will redirect to admin page later.</p>
-    </section>
+        <p style="text-align:center; margin-top:15px;">
+            Admin login will redirect to admin page later.
+        </p>
+    </div>
   </main>
 
   <footer>
@@ -68,7 +125,7 @@
         document.getElementById("adminGo").style.display = "none";
     }
 
-    document.querySelector("form").addEventListener("submit", async function (event) {
+    document.getElementById("loginForm").addEventListener("submit", async function (event) {
       event.preventDefault();
 
       const username = document.querySelector('input[name="username"]').value.trim();
