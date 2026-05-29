@@ -51,17 +51,18 @@
       <section>
         <h2>Search Blog Posts</h2>
 
-        <form action="#" method="get">
+        <form id="blogSearchForm" action="#" method="get">
           <label for="search">Search by keyword</label><br />
           <input type="text" id="search" name="search" /><br /><br />
 
           <label for="category">Filter by category</label><br />
           <select id="category" name="category">
             <option value="">All categories</option>
-            <option value="climate-action">Climate Action</option>
-            <option value="disaster-resilience">Disaster Resilience</option>
-            <option value="sustainability">Sustainability</option>
-            <option value="community">Community</option>
+            <option value="Climate Action">Climate Action</option>
+            <option value="Disaster Resilience">Disaster Resilience</option>
+            <option value="Sustainability">Sustainability</option>
+            <option value="Community">Community</option>
+            <option value="Research and Policy">Research and Policy</option>
           </select>
           <br /><br />
 
@@ -193,10 +194,14 @@
 
         const featuredBlogList = document.getElementById("featuredBlogList");
         const blogList = document.getElementById("blogList");
+        const blogSearchForm = document.getElementById("blogSearchForm");
+        const searchInput = document.getElementById("search");
+        const categoryFilter = document.getElementById("category");
         const editBlogSection = document.getElementById("editBlogSection");
         const editBlogForm = document.getElementById("editBlogForm");
         const editBlogMessage = document.getElementById("editBlogMessage");
         let loadedBlogs = [];
+        let filteredBlogs = [];
 
         function createBlogArticle(blog, options = {}) {
             const article = document.createElement("article");
@@ -302,6 +307,30 @@
             renderRecentBlogs(blogs);
         }
 
+        function applyBlogFilters() {
+            const keyword = searchInput.value.trim().toLowerCase();
+            const selectedCategory = categoryFilter.value;
+
+            filteredBlogs = loadedBlogs.filter((blog) => {
+                const tagsText = Array.isArray(blog.tags) ? blog.tags.join(" ") : "";
+                const searchableText = [
+                    blog.title,
+                    blog.summary,
+                    blog.content,
+                    blog.author,
+                    blog.category,
+                    tagsText
+                ].join(" ").toLowerCase();
+
+                const matchesKeyword = keyword === "" || searchableText.includes(keyword);
+                const matchesCategory = selectedCategory === "" || blog.category === selectedCategory;
+
+                return matchesKeyword && matchesCategory;
+            });
+
+            renderBlogs(filteredBlogs);
+        }
+
         async function loadBlogs() {
             try {
                 const response = await fetch("https://interactive-engagement-for-climate.onrender.com/blog.php");
@@ -312,7 +341,7 @@
                 }
 
                 loadedBlogs = data.blogs || [];
-                renderBlogs(loadedBlogs);
+                applyBlogFilters();
             } catch (error) {
                 blogList.innerHTML = "";
                 const errorMessage = document.createElement("p");
@@ -426,6 +455,14 @@
                 editBlogMessage.style.color = "#842029";
             }
         });
+
+        blogSearchForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            applyBlogFilters();
+        });
+
+        searchInput.addEventListener("input", applyBlogFilters);
+        categoryFilter.addEventListener("change", applyBlogFilters);
 
         loadBlogs();
     </script>
